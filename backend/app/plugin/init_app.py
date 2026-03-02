@@ -74,7 +74,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[Any, Any]:
 
     except Exception as e:
         log.error(f"❌ 应用初始化失败: {e!s}")
-        raise
+        raise SystemExit(1)
 
     yield
 

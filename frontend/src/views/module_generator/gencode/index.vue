@@ -801,7 +801,12 @@
         <el-button v-if="activeStep != 0" type="success" :icon="Back" @click="prevStep">
           上一步
         </el-button>
-        <el-button v-if="activeStep != 2" type="primary" @click="nextStep">
+        <el-button
+          v-if="activeStep != 2"
+          type="primary"
+          :loading="nextStepLoading"
+          @click="nextStep"
+        >
           下一步
           <el-icon class="el-icon--right"><Right /></el-icon>
         </el-button>
@@ -898,6 +903,7 @@ const basicInfo = ref<FormInstance>();
 
 // 状态管理
 const loading = ref(false);
+const nextStepLoading = ref(false);
 const total = ref<number>(0);
 const uniqueId = ref("");
 const editVisible = ref(false);
@@ -1595,12 +1601,8 @@ async function submitForm() {
       columns: info.columns || [], // 确保columns存在
     };
 
-    const response = await GencodeAPI.updateTable(tableData as GenTableSchema, info.id || 0);
-
-    if (response?.data?.code === 200) {
-      ElMessage.success((response?.data as any)?.message || "保存成功");
-      return true;
-    }
+    await GencodeAPI.updateTable(tableData as GenTableSchema, info.id || 0);
+    return true;
   } catch (error) {
     console.error("保存表单失败:", error);
   } finally {
@@ -1611,28 +1613,33 @@ async function submitForm() {
 // 下一步
 async function nextStep(): Promise<void> {
   if (activeStep.value < 3) {
-    // 在进入下一步前先保存当前配置
-    if (activeStep.value === 0) {
-      // 第一步：基础配置
-      const basicInfoValid = await basicInfo.value?.validate().catch(() => false);
-      if (!basicInfoValid) return;
-    } else if (activeStep.value === 1) {
-      // 第二步：字段配置
-      if (!info.columns || info.columns.length === 0) {
-        ElMessage.error("请配置字段信息");
-        return;
+    nextStepLoading.value = true;
+    try {
+      // 在进入下一步前先保存当前配置
+      if (activeStep.value === 0) {
+        // 第一步：基础配置
+        const basicInfoValid = await basicInfo.value?.validate().catch(() => false);
+        if (!basicInfoValid) return;
+      } else if (activeStep.value === 1) {
+        // 第二步：字段配置
+        if (!info.columns || info.columns.length === 0) {
+          ElMessage.error("请配置字段信息");
+          return;
+        }
       }
-    }
 
-    // 保存配置
-    const saved = await submitForm();
-    if (!saved) return;
+      // 保存配置
+      const saved = await submitForm();
+      if (!saved) return;
 
-    activeStep.value++;
+      activeStep.value++;
 
-    // 当从字段配置进入预览步骤时，自动加载预览数据
-    if (activeStep.value === 2 && info.id) {
-      await handlePreview({ id: info.id, table_name: info.table_name } as GenTableSchema);
+      // 当从字段配置进入预览步骤时，自动加载预览数据
+      if (activeStep.value === 2 && info.id) {
+        await handlePreview({ id: info.id, table_name: info.table_name } as GenTableSchema);
+      }
+    } finally {
+      nextStepLoading.value = false;
     }
   }
 }

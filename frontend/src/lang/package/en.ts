@@ -125,6 +125,8 @@ export default {
     haveAccount: "Already have an account?",
     noAccount: "Don't have an account?",
     quickFill: "Quick fill",
+    quickLoginTip: "Click user avatar to login quickly",
+    selectUser: "Select a user",
     reg: "Register",
   },
   // 导航栏国际化

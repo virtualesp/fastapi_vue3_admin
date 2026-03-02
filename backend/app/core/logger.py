@@ -50,8 +50,9 @@ def cleanup_logging() -> None:
     for handler_id in _logger_handlers:
         try:
             logger.remove(handler_id)
-        except Exception as e:
-            logger.opt(depth=1).warning(f"移除日志处理器 {handler_id} 时出错: {e}")
+        except ValueError:
+            # 处理器已不存在，忽略
+            pass
 
     _logger_handlers.clear()
 

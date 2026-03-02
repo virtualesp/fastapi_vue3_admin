@@ -125,6 +125,8 @@ export default {
     haveAccount: "已有账号？",
     noAccount: "您没有账号？",
     quickFill: "快速填写",
+    quickLoginTip: "点击用户头像快速登录",
+    selectUser: "请选择用户",
     reg: "注 册",
   },
   // 导航栏国际化

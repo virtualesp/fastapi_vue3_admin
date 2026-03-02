@@ -4,7 +4,7 @@
       <template #header>
         <div class="card-header">
           <div class="status-content">
-            <span>调度器任务列表</span>
+            <span>调度器监控</span>
             <div class="status-item">
               <span class="label">状态：</span>
               <el-tag :type="getSchedulerStatusType(schedulerStatus.status)" size="large">
@@ -229,7 +229,7 @@
                     icon="CaretRight"
                     @click="handleRunJobNow(job.id)"
                   >
-                    立即调试
+                    调试
                   </el-button>
                   <el-button
                     v-if="job.status !== '未知'"
@@ -248,7 +248,7 @@
                     icon="List"
                     @click="handleOpenExecutionLogDrawer(job)"
                   >
-                    执行记录
+                    记录
                   </el-button>
                 </div>
               </template>
@@ -938,8 +938,11 @@ onMounted(async () => {
   width: 24px;
   height: 24px;
   font-size: 12px;
-  background-color: #409eff;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(102, 126, 234, 0.4);
 }
 
 .job-name {
@@ -977,7 +980,6 @@ onMounted(async () => {
 
 .job-card-footer {
   display: flex;
-  gap: 8px;
   justify-content: space-between;
 }
 
