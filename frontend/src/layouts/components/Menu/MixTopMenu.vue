@@ -3,21 +3,9 @@
   <el-menu
     mode="horizontal"
     :default-active="activeTopMenuPath"
-    :background-color="
-      theme === 'dark' || sidebarColorScheme === SidebarColor.CLASSIC_BLUE
-        ? variables['menu-background']
-        : undefined
-    "
-    :text-color="
-      theme === 'dark' || sidebarColorScheme === SidebarColor.CLASSIC_BLUE
-        ? variables['menu-text']
-        : undefined
-    "
-    :active-text-color="
-      theme === 'dark' || sidebarColorScheme === SidebarColor.CLASSIC_BLUE
-        ? variables['menu-active-text']
-        : undefined
-    "
+    :background-color="theme === 'dark' ? variables['menu-background'] : undefined"
+    :text-color="theme === 'dark' ? variables['menu-text'] : undefined"
+    :active-text-color="theme === 'dark' ? variables['menu-active-text'] : undefined"
     @select="handleTopMenuSelect"
   >
     <el-menu-item v-for="item in topMenuItems" :key="item.path" :index="item.path">
@@ -36,7 +24,6 @@ defineOptions({
 import { LocationQueryRaw, RouteRecordRaw } from "vue-router";
 import { usePermissionStore, useAppStore, useSettingsStore } from "@/store";
 import variables from "@/styles/variables.module.scss";
-import { SidebarColor } from "@/enums/settings/theme.enum";
 
 const router = useRouter();
 const appStore = useAppStore();
@@ -45,9 +32,6 @@ const settingsStore = useSettingsStore();
 
 // 获取主题
 const theme = computed(() => settingsStore.theme);
-
-// 获取浅色主题下的侧边栏配色方案
-const sidebarColorScheme = computed(() => settingsStore.sidebarColorScheme);
 
 // 顶部菜单列表
 const topMenus = ref<RouteRecordRaw[]>([]);

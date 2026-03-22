@@ -82,70 +82,71 @@
         </div>
       </div>
 
-      <el-table
-        ref="dataTableRef"
-        v-loading="loading"
-        :data="pageTableData"
-        class="data-table__content"
-        highlight-current-row
-        height="calc(100vh - 440px)"
-        max-height="calc(100vh - 440px)"
-        border
-        stripe
-        @selection-change="handleSelectionChange"
-      >
-        <template #empty>
-          <el-empty :image-size="80" description="暂无数据" />
-        </template>
-        <el-table-column type="selection" align="center" min-width="55" />
-        <el-table-column type="index" fixed label="序号" min-width="60">
-          <template #default="scope">
-            {{ (queryFormData.page_no - 1) * queryFormData.page_size + scope.$index + 1 }}
+      <div class="data-table__content">
+        <el-table
+          ref="dataTableRef"
+          v-loading="loading"
+          :data="pageTableData"
+          highlight-current-row
+          height="calc(100vh - 440px)"
+          max-height="calc(100vh - 440px)"
+          border
+          stripe
+          @selection-change="handleSelectionChange"
+        >
+          <template #empty>
+            <el-empty :image-size="80" description="暂无数据" />
           </template>
-        </el-table-column>
-        <el-table-column label="节点名称" prop="name" min-width="140" />
-        <el-table-column label="节点编码" prop="code" min-width="120" />
-        <el-table-column label="存储器" prop="jobstore" min-width="80" />
-        <el-table-column label="执行器" prop="executor" min-width="80" />
-        <el-table-column label="创建时间" prop="created_time" min-width="180" sortable />
+          <el-table-column type="selection" align="center" min-width="55" />
+          <el-table-column type="index" fixed label="序号" min-width="60">
+            <template #default="scope">
+              {{ (queryFormData.page_no - 1) * queryFormData.page_size + scope.$index + 1 }}
+            </template>
+          </el-table-column>
+          <el-table-column label="节点名称" prop="name" min-width="140" />
+          <el-table-column label="节点编码" prop="code" min-width="120" />
+          <el-table-column label="存储器" prop="jobstore" min-width="80" />
+          <el-table-column label="执行器" prop="executor" min-width="80" />
+          <el-table-column label="创建时间" prop="created_time" min-width="180" sortable />
 
-        <OperationColumn :list-data-length="pageTableData.length">
-          <template #default="scope">
-            <el-space class="flex">
-              <el-button
-                v-hasPerm="['module_task:node:execute']"
-                type="warning"
-                size="small"
-                link
-                icon="VideoPlay"
-                @click="handleOpenExecuteDialog(scope.row)"
-              >
-                调试
-              </el-button>
-              <el-button
-                v-hasPerm="['module_task:node:update']"
-                type="primary"
-                size="small"
-                link
-                icon="edit"
-                @click="handleOpenDialog('update', scope.row.id)"
-              >
-                编辑
-              </el-button>
-              <el-button
-                v-hasPerm="['module_task:node:delete']"
-                type="danger"
-                size="small"
-                link
-                icon="delete"
-                @click="handleDelete([scope.row.id])"
-              >
-                删除
-              </el-button>
-            </el-space>
-          </template>
-        </OperationColumn>
-      </el-table>
+          <OperationColumn :list-data-length="pageTableData.length">
+            <template #default="scope">
+              <el-space class="flex">
+                <el-button
+                  v-hasPerm="['module_task:node:execute']"
+                  type="warning"
+                  size="small"
+                  link
+                  icon="VideoPlay"
+                  @click="handleOpenExecuteDialog(scope.row)"
+                >
+                  调试
+                </el-button>
+                <el-button
+                  v-hasPerm="['module_task:node:update']"
+                  type="primary"
+                  size="small"
+                  link
+                  icon="edit"
+                  @click="handleOpenDialog('update', scope.row.id)"
+                >
+                  编辑
+                </el-button>
+                <el-button
+                  v-hasPerm="['module_task:node:delete']"
+                  type="danger"
+                  size="small"
+                  link
+                  icon="delete"
+                  @click="handleDelete([scope.row.id])"
+                >
+                  删除
+                </el-button>
+              </el-space>
+            </template>
+          </OperationColumn>
+        </el-table>
+      </div>
 
       <template #footer>
         <pagination

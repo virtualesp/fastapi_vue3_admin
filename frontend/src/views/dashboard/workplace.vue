@@ -10,7 +10,7 @@
               :src="currentUser.avatar"
               class="mr-20px"
             />
-            <el-icon v-else :size="40" color="#909399" class="mr-20px">
+            <el-icon v-else :size="40" class="text-secondary mr-20px">
               <UserFilled />
             </el-icon>
             <div>

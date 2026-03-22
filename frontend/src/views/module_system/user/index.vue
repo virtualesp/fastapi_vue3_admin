@@ -183,108 +183,109 @@
           </div>
 
           <!-- 表格区域 -->
-          <el-table
-            ref="dataTableRef"
-            v-loading="loading"
-            :data="pageTableData"
-            highlight-current-row
-            class="data-table__content"
-            height="calc(100vh - 445px)"
-            max-height="calc(100vh - 445px)"
-            border
-            stripe
-            @selection-change="handleSelectionChange"
-          >
-            <template #empty>
-              <el-empty :image-size="80" description="暂无数据" />
-            </template>
-            <el-table-column type="selection" min-width="55" align="center" />
-            <el-table-column type="index" fixed label="序号" min-width="60">
-              <template #default="scope">
-                {{ (queryFormData.page_no - 1) * queryFormData.page_size + scope.$index + 1 }}
+          <div class="data-table__content">
+            <el-table
+              ref="dataTableRef"
+              v-loading="loading"
+              :data="pageTableData"
+              highlight-current-row
+              height="calc(100vh - 445px)"
+              max-height="calc(100vh - 445px)"
+              border
+              stripe
+              @selection-change="handleSelectionChange"
+            >
+              <template #empty>
+                <el-empty :image-size="80" description="暂无数据" />
               </template>
-            </el-table-column>
-            <el-table-column label="头像" prop="avatar" min-width="80" align="center">
-              <template #default="scope">
-                <template v-if="scope.row.avatar">
-                  <el-avatar size="small" :src="scope.row.avatar" />
+              <el-table-column type="selection" min-width="55" align="center" />
+              <el-table-column type="index" fixed label="序号" min-width="60">
+                <template #default="scope">
+                  {{ (queryFormData.page_no - 1) * queryFormData.page_size + scope.$index + 1 }}
                 </template>
-                <template v-else>
-                  <el-avatar size="small" icon="UserFilled" />
+              </el-table-column>
+              <el-table-column label="头像" prop="avatar" min-width="80" align="center">
+                <template #default="scope">
+                  <template v-if="scope.row.avatar">
+                    <el-avatar size="small" :src="scope.row.avatar" />
+                  </template>
+                  <template v-else>
+                    <el-avatar size="small" icon="UserFilled" />
+                  </template>
                 </template>
-              </template>
-            </el-table-column>
-            <el-table-column label="账号" prop="username" min-width="100" />
-            <el-table-column label="用户名" prop="name" min-width="100" />
-            <el-table-column label="状态" prop="status" min-width="100">
-              <template #default="scope">
-                <el-tag :type="scope.row.status === '0' ? 'success' : 'danger'">
-                  {{ scope.row.status === "0" ? "启用" : "停用" }}
-                </el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column label="部门" prop="dept" min-width="100">
-              <template #default="scope">
-                {{ scope.row.dept ? scope.row.dept.name : "" }}
-              </template>
-            </el-table-column>
-            <el-table-column label="性别" prop="gender" min-width="100">
-              <template #default="scope">
-                <el-tag v-if="scope.row.gender === '0'" type="success">男</el-tag>
-                <el-tag v-else-if="scope.row.gender === '1'" type="warning">女</el-tag>
-                <el-tag v-else type="info">未知</el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column label="创建时间" prop="created_time" min-width="160" />
-            <el-table-column label="更新时间" prop="updated_time" min-width="160" />
-            <el-table-column fixed="right" label="操作" align="center" min-width="280">
-              <template #default="scope">
-                <el-button
-                  v-hasPerm="['module_system:user:update']"
-                  type="warning"
-                  icon="RefreshLeft"
-                  size="small"
-                  link
-                  :disabled="scope.row.is_superuser === true"
-                  @click="hancleResetPassword(scope.row)"
-                >
-                  重置密码
-                </el-button>
-                <el-button
-                  v-hasPerm="['module_system:user:detail']"
-                  type="info"
-                  size="small"
-                  link
-                  icon="document"
-                  @click="handleOpenDialog('detail', scope.row.id)"
-                >
-                  详情
-                </el-button>
-                <el-button
-                  v-hasPerm="['module_system:user:update']"
-                  type="primary"
-                  size="small"
-                  link
-                  icon="edit"
-                  :disabled="scope.row.is_superuser === true"
-                  @click="handleOpenDialog('update', scope.row.id)"
-                >
-                  编辑
-                </el-button>
-                <el-button
-                  v-hasPerm="['module_system:user:delete']"
-                  type="danger"
-                  size="small"
-                  link
-                  icon="delete"
-                  :disabled="scope.row.is_superuser === true"
-                  @click="handleDelete([scope.row.id])"
-                >
-                  删除
-                </el-button>
-              </template>
-            </el-table-column>
-          </el-table>
+              </el-table-column>
+              <el-table-column label="账号" prop="username" min-width="100" />
+              <el-table-column label="用户名" prop="name" min-width="100" />
+              <el-table-column label="状态" prop="status" min-width="100">
+                <template #default="scope">
+                  <el-tag :type="scope.row.status === '0' ? 'success' : 'danger'">
+                    {{ scope.row.status === "0" ? "启用" : "停用" }}
+                  </el-tag>
+                </template>
+              </el-table-column>
+              <el-table-column label="部门" prop="dept" min-width="100">
+                <template #default="scope">
+                  {{ scope.row.dept ? scope.row.dept.name : "" }}
+                </template>
+              </el-table-column>
+              <el-table-column label="性别" prop="gender" min-width="100">
+                <template #default="scope">
+                  <el-tag v-if="scope.row.gender === '0'" type="success">男</el-tag>
+                  <el-tag v-else-if="scope.row.gender === '1'" type="warning">女</el-tag>
+                  <el-tag v-else type="info">未知</el-tag>
+                </template>
+              </el-table-column>
+              <el-table-column label="创建时间" prop="created_time" min-width="160" />
+              <el-table-column label="更新时间" prop="updated_time" min-width="160" />
+              <el-table-column fixed="right" label="操作" align="center" min-width="280">
+                <template #default="scope">
+                  <el-button
+                    v-hasPerm="['module_system:user:update']"
+                    type="warning"
+                    icon="RefreshLeft"
+                    size="small"
+                    link
+                    :disabled="scope.row.is_superuser === true"
+                    @click="hancleResetPassword(scope.row)"
+                  >
+                    重置密码
+                  </el-button>
+                  <el-button
+                    v-hasPerm="['module_system:user:detail']"
+                    type="info"
+                    size="small"
+                    link
+                    icon="document"
+                    @click="handleOpenDialog('detail', scope.row.id)"
+                  >
+                    详情
+                  </el-button>
+                  <el-button
+                    v-hasPerm="['module_system:user:update']"
+                    type="primary"
+                    size="small"
+                    link
+                    icon="edit"
+                    :disabled="scope.row.is_superuser === true"
+                    @click="handleOpenDialog('update', scope.row.id)"
+                  >
+                    编辑
+                  </el-button>
+                  <el-button
+                    v-hasPerm="['module_system:user:delete']"
+                    type="danger"
+                    size="small"
+                    link
+                    icon="delete"
+                    :disabled="scope.row.is_superuser === true"
+                    @click="handleDelete([scope.row.id])"
+                  >
+                    删除
+                  </el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
 
           <!-- 分页区域 -->
           <template #footer>

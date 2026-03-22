@@ -20,8 +20,10 @@
       }"
       class="layout__main"
     >
-      <NavBar />
-      <TagsView v-if="isShowTagsView" />
+      <div class="fixed-header">
+        <NavBar />
+        <TagsView v-if="isShowTagsView" />
+      </div>
       <AppMain />
     </div>
   </BaseLayout>
@@ -53,7 +55,7 @@ const { routes } = useLayoutMenu();
     left: 0;
     z-index: 999;
     width: $sidebar-width;
-    background-color: $menu-background;
+    background-color: var(--menu-background);
     transition: width 0.28s;
 
     &--collapsed {
@@ -93,6 +95,7 @@ const { routes } = useLayoutMenu();
       position: sticky;
       top: 0;
       z-index: 9;
+      background-color: var(--bg-secondary);
       transition: width 0.28s;
     }
   }

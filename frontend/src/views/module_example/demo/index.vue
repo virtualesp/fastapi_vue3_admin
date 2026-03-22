@@ -210,210 +210,211 @@
       </div>
 
       <!-- 表格区域：系统配置列表 -->
-      <el-table
-        ref="tableRef"
-        v-loading="loading"
-        :data="pageTableData"
-        highlight-current-row
-        class="data-table__content"
-        height="calc(100vh - 440px)"
-        max-height="calc(100vh - 440px)"
-        border
-        stripe
-        @selection-change="handleSelectionChange"
-      >
-        <template #empty>
-          <el-empty :image-size="80" description="暂无数据" />
-        </template>
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'selection')?.show"
-          type="selection"
-          min-width="55"
-          align="center"
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'index')?.show"
-          fixed
-          label="序号"
-          min-width="60"
+      <div class="data-table__content">
+        <el-table
+          ref="tableRef"
+          v-loading="loading"
+          :data="pageTableData"
+          highlight-current-row
+          height="calc(100vh - 440px)"
+          max-height="calc(100vh - 440px)"
+          border
+          stripe
+          @selection-change="handleSelectionChange"
         >
-          <template #default="scope">
-            {{ (queryFormData.page_no - 1) * queryFormData.page_size + scope.$index + 1 }}
+          <template #empty>
+            <el-empty :image-size="80" description="暂无数据" />
           </template>
-        </el-table-column>
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'name')?.show"
-          label="名称"
-          prop="name"
-          min-width="140"
-          show-overflow-tooltip
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'uuid')?.show"
-          label="UUID"
-          prop="uuid"
-          min-width="180"
-          show-overflow-tooltip
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'status')?.show"
-          label="状态"
-          prop="status"
-          min-width="120"
-          show-overflow-tooltip
-        >
-          <template #default="scope">
-            <el-tag :type="scope.row.status ? 'success' : 'info'">
-              {{ scope.row.status ? "启用" : "停用" }}
-            </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'a')?.show"
-          label="整数"
-          prop="a"
-          min-width="100"
-          show-overflow-tooltip
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'b')?.show"
-          label="大整数"
-          prop="b"
-          min-width="120"
-          show-overflow-tooltip
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'c')?.show"
-          label="浮点数"
-          prop="c"
-          min-width="100"
-          show-overflow-tooltip
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'd')?.show"
-          label="布尔值"
-          prop="d"
-          min-width="100"
-          show-overflow-tooltip
-        >
-          <template #default="scope">
-            <el-tag :type="scope.row.d ? 'success' : 'danger'">
-              {{ scope.row.d ? "是" : "否" }}
-            </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'e')?.show"
-          label="日期"
-          prop="e"
-          min-width="120"
-          show-overflow-tooltip
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'f')?.show"
-          label="时间"
-          prop="f"
-          min-width="120"
-          show-overflow-tooltip
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'g')?.show"
-          label="日期时间"
-          prop="g"
-          min-width="180"
-          show-overflow-tooltip
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'h')?.show"
-          label="长文本"
-          prop="h"
-          min-width="140"
-          show-overflow-tooltip
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'description')?.show"
-          label="描述"
-          prop="description"
-          min-width="140"
-          show-overflow-tooltip
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'created_time')?.show"
-          label="创建时间"
-          prop="created_time"
-          min-width="180"
-          show-overflow-tooltip
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'updated_time')?.show"
-          label="更新时间"
-          prop="updated_time"
-          min-width="180"
-          show-overflow-tooltip
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'created_id')?.show"
-          label="创建人"
-          prop="created_id"
-          min-width="120"
-          show-overflow-tooltip
-        >
-          <template #default="scope">
-            <el-tag>{{ scope.row.created_by?.name }}</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'updated_id')?.show"
-          label="更新人"
-          prop="updated_id"
-          min-width="120"
-          show-overflow-tooltip
-        >
-          <template #default="scope">
-            <el-tag>{{ scope.row.updated_by?.name }}</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'operation')?.show"
-          fixed="right"
-          label="操作"
-          align="center"
-          min-width="200"
-        >
-          <template #default="scope">
-            <el-button
-              v-hasPerm="['module_example:demo:detail']"
-              type="info"
-              size="small"
-              link
-              icon="document"
-              @click="handleOpenDialog('detail', scope.row.id)"
-            >
-              详情
-            </el-button>
-            <el-button
-              v-hasPerm="['module_example:demo:update']"
-              type="primary"
-              size="small"
-              link
-              icon="edit"
-              @click="handleOpenDialog('update', scope.row.id)"
-            >
-              编辑
-            </el-button>
-            <el-button
-              v-hasPerm="['module_example:demo:delete']"
-              type="danger"
-              size="small"
-              link
-              icon="delete"
-              @click="handleDelete([scope.row.id])"
-            >
-              删除
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'selection')?.show"
+            type="selection"
+            min-width="55"
+            align="center"
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'index')?.show"
+            fixed
+            label="序号"
+            min-width="60"
+          >
+            <template #default="scope">
+              {{ (queryFormData.page_no - 1) * queryFormData.page_size + scope.$index + 1 }}
+            </template>
+          </el-table-column>
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'name')?.show"
+            label="名称"
+            prop="name"
+            min-width="140"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'uuid')?.show"
+            label="UUID"
+            prop="uuid"
+            min-width="180"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'status')?.show"
+            label="状态"
+            prop="status"
+            min-width="120"
+            show-overflow-tooltip
+          >
+            <template #default="scope">
+              <el-tag :type="scope.row.status ? 'success' : 'info'">
+                {{ scope.row.status ? "启用" : "停用" }}
+              </el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'a')?.show"
+            label="整数"
+            prop="a"
+            min-width="100"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'b')?.show"
+            label="大整数"
+            prop="b"
+            min-width="120"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'c')?.show"
+            label="浮点数"
+            prop="c"
+            min-width="100"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'd')?.show"
+            label="布尔值"
+            prop="d"
+            min-width="100"
+            show-overflow-tooltip
+          >
+            <template #default="scope">
+              <el-tag :type="scope.row.d ? 'success' : 'danger'">
+                {{ scope.row.d ? "是" : "否" }}
+              </el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'e')?.show"
+            label="日期"
+            prop="e"
+            min-width="120"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'f')?.show"
+            label="时间"
+            prop="f"
+            min-width="120"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'g')?.show"
+            label="日期时间"
+            prop="g"
+            min-width="180"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'h')?.show"
+            label="长文本"
+            prop="h"
+            min-width="140"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'description')?.show"
+            label="描述"
+            prop="description"
+            min-width="140"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'created_time')?.show"
+            label="创建时间"
+            prop="created_time"
+            min-width="180"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'updated_time')?.show"
+            label="更新时间"
+            prop="updated_time"
+            min-width="180"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'created_id')?.show"
+            label="创建人"
+            prop="created_id"
+            min-width="120"
+            show-overflow-tooltip
+          >
+            <template #default="scope">
+              <el-tag>{{ scope.row.created_by?.name }}</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'updated_id')?.show"
+            label="更新人"
+            prop="updated_id"
+            min-width="120"
+            show-overflow-tooltip
+          >
+            <template #default="scope">
+              <el-tag>{{ scope.row.updated_by?.name }}</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'operation')?.show"
+            fixed="right"
+            label="操作"
+            align="center"
+            min-width="200"
+          >
+            <template #default="scope">
+              <el-button
+                v-hasPerm="['module_example:demo:detail']"
+                type="info"
+                size="small"
+                link
+                icon="document"
+                @click="handleOpenDialog('detail', scope.row.id)"
+              >
+                详情
+              </el-button>
+              <el-button
+                v-hasPerm="['module_example:demo:update']"
+                type="primary"
+                size="small"
+                link
+                icon="edit"
+                @click="handleOpenDialog('update', scope.row.id)"
+              >
+                编辑
+              </el-button>
+              <el-button
+                v-hasPerm="['module_example:demo:delete']"
+                type="danger"
+                size="small"
+                link
+                icon="delete"
+                @click="handleDelete([scope.row.id])"
+              >
+                删除
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
 
       <!-- 分页区域 -->
       <template #footer>

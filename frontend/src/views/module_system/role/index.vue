@@ -164,203 +164,204 @@
         </div>
       </div>
 
-      <el-table
-        ref="dataTableRef"
-        v-loading="loading"
-        :data="pageTableData"
-        highlight-current-row
-        class="data-table__content"
-        height="calc(100vh - 440px)"
-        max-height="calc(100vh - 440px)"
-        border
-        stripe
-        @selection-change="handleSelectionChange"
-      >
-        <template #empty>
-          <el-empty :image-size="80" description="暂无数据" />
-        </template>
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'selection')?.show"
-          type="selection"
-          width="55"
-          align="center"
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'index')?.show"
-          type="index"
-          fixed
-          label="序号"
-          width="60"
+      <div class="data-table__content">
+        <el-table
+          ref="dataTableRef"
+          v-loading="loading"
+          :data="pageTableData"
+          highlight-current-row
+          height="calc(100vh - 440px)"
+          max-height="calc(100vh - 440px)"
+          border
+          stripe
+          @selection-change="handleSelectionChange"
         >
-          <template #default="scope">
-            {{ (queryFormData.page_no - 1) * queryFormData.page_size + scope.$index + 1 }}
+          <template #empty>
+            <el-empty :image-size="80" description="暂无数据" />
           </template>
-        </el-table-column>
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'name')?.show"
-          key="name"
-          label="角色名称"
-          prop="name"
-          min-width="100"
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'code')?.show"
-          key="code"
-          label="角色编码"
-          prop="code"
-          min-width="100"
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'data_scope')?.show"
-          key="data_scope"
-          label="数据权限"
-          prop="data_scope"
-          min-width="200"
-        >
-          <template #default="scope">
-            <el-tag v-if="scope.row.data_scope === 1" type="primary">仅本人数据权限</el-tag>
-            <el-tag v-else-if="scope.row.data_scope === 2" type="info">本部门数据权限</el-tag>
-            <el-tag v-else-if="scope.row.data_scope === 3" type="warning">
-              本部门及以下数据权限
-            </el-tag>
-            <el-tag v-else-if="scope.row.data_scope === 4" type="success">全部数据权限</el-tag>
-            <el-tag v-else type="danger">自定义数据权限</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'depts')?.show"
-          key="depts"
-          label="所属部门"
-          prop="depts"
-          min-width="200"
-        >
-          <template #default="scope">
-            <template v-if="scope.row.depts && scope.row.depts.length > 0">
-              <el-tag
-                v-for="dept in scope.row.depts.slice(0, 3)"
-                :key="dept.id"
-                type="info"
-                style="margin-right: 4px; margin-bottom: 4px"
-              >
-                {{ dept.name }}
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'selection')?.show"
+            type="selection"
+            width="55"
+            align="center"
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'index')?.show"
+            type="index"
+            fixed
+            label="序号"
+            width="60"
+          >
+            <template #default="scope">
+              {{ (queryFormData.page_no - 1) * queryFormData.page_size + scope.$index + 1 }}
+            </template>
+          </el-table-column>
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'name')?.show"
+            key="name"
+            label="角色名称"
+            prop="name"
+            min-width="100"
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'code')?.show"
+            key="code"
+            label="角色编码"
+            prop="code"
+            min-width="100"
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'data_scope')?.show"
+            key="data_scope"
+            label="数据权限"
+            prop="data_scope"
+            min-width="200"
+          >
+            <template #default="scope">
+              <el-tag v-if="scope.row.data_scope === 1" type="primary">仅本人数据权限</el-tag>
+              <el-tag v-else-if="scope.row.data_scope === 2" type="info">本部门数据权限</el-tag>
+              <el-tag v-else-if="scope.row.data_scope === 3" type="warning">
+                本部门及以下数据权限
               </el-tag>
-              <el-tag v-if="scope.row.depts.length > 3" type="info" style="margin-bottom: 4px">
-                +{{ scope.row.depts.length - 3 }}
+              <el-tag v-else-if="scope.row.data_scope === 4" type="success">全部数据权限</el-tag>
+              <el-tag v-else type="danger">自定义数据权限</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'depts')?.show"
+            key="depts"
+            label="所属部门"
+            prop="depts"
+            min-width="200"
+          >
+            <template #default="scope">
+              <template v-if="scope.row.depts && scope.row.depts.length > 0">
+                <el-tag
+                  v-for="dept in scope.row.depts.slice(0, 3)"
+                  :key="dept.id"
+                  type="info"
+                  style="margin-right: 4px; margin-bottom: 4px"
+                >
+                  {{ dept.name }}
+                </el-tag>
+                <el-tag v-if="scope.row.depts.length > 3" type="info" style="margin-bottom: 4px">
+                  +{{ scope.row.depts.length - 3 }}
+                </el-tag>
+              </template>
+              <span v-else style="color: #909399">-</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'order')?.show"
+            key="order"
+            label="排序"
+            prop="order"
+            min-width="80"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'status')?.show"
+            key="status"
+            label="状态"
+            prop="status"
+            min-width="80"
+          >
+            <template #default="scope">
+              <el-tag :type="scope.row.status === '0' ? 'success' : 'danger'">
+                {{ scope.row.status === "0" ? "启用" : "停用" }}
               </el-tag>
             </template>
-            <span v-else style="color: #909399">-</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'order')?.show"
-          key="order"
-          label="排序"
-          prop="order"
-          min-width="80"
-          show-overflow-tooltip
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'status')?.show"
-          key="status"
-          label="状态"
-          prop="status"
-          min-width="80"
-        >
-          <template #default="scope">
-            <el-tag :type="scope.row.status === '0' ? 'success' : 'danger'">
-              {{ scope.row.status === "0" ? "启用" : "停用" }}
-            </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'description')?.show"
-          key="description"
-          label="描述"
-          prop="description"
-          min-width="100"
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'created_time')?.show"
-          key="created_time"
-          label="创建时间"
-          prop="created_time"
-          min-width="200"
-          sortable
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'updated_time')?.show"
-          key="updated_time"
-          label="更新时间"
-          prop="updated_time"
-          min-width="200"
-          sortable
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'operation')?.show"
-          fixed="right"
-          label="操作"
-          align="center"
-          min-width="280"
-        >
-          <template #default="scope">
-            <el-button
-              v-hasPerm="['module_system:role:permission']"
-              type="warning"
-              size="small"
-              link
-              icon="position"
-              :disabled="scope.row.id === 1"
-              @click="
-                scope.row.id === 1
-                  ? ElMessage.warning('系统默认角色，不可操作')
-                  : handleOpenAssignPermDialog(scope.row.id, scope.row.name)
-              "
-            >
-              分配权限
-            </el-button>
-            <el-button
-              v-hasPerm="['module_system:role:detail']"
-              type="info"
-              size="small"
-              link
-              icon="document"
-              @click="handleOpenDialog('detail', scope.row.id)"
-            >
-              详情
-            </el-button>
-            <el-button
-              v-hasPerm="['module_system:role:update']"
-              type="primary"
-              size="small"
-              link
-              icon="edit"
-              :disabled="scope.row.id === 1"
-              @click="
-                scope.row.id === 1
-                  ? ElMessage.warning('系统默认角色，不可操作')
-                  : handleOpenDialog('update', scope.row.id)
-              "
-            >
-              编辑
-            </el-button>
-            <el-button
-              v-hasPerm="['module_system:role:delete']"
-              type="danger"
-              size="small"
-              link
-              icon="delete"
-              :disabled="scope.row.id === 1"
-              @click="
-                scope.row.id === 1
-                  ? ElMessage.warning('系统默认角色，不可操作')
-                  : handleDelete([scope.row.id])
-              "
-            >
-              删除
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+          </el-table-column>
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'description')?.show"
+            key="description"
+            label="描述"
+            prop="description"
+            min-width="100"
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'created_time')?.show"
+            key="created_time"
+            label="创建时间"
+            prop="created_time"
+            min-width="200"
+            sortable
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'updated_time')?.show"
+            key="updated_time"
+            label="更新时间"
+            prop="updated_time"
+            min-width="200"
+            sortable
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'operation')?.show"
+            fixed="right"
+            label="操作"
+            align="center"
+            min-width="280"
+          >
+            <template #default="scope">
+              <el-button
+                v-hasPerm="['module_system:role:permission']"
+                type="warning"
+                size="small"
+                link
+                icon="position"
+                :disabled="scope.row.id === 1"
+                @click="
+                  scope.row.id === 1
+                    ? ElMessage.warning('系统默认角色，不可操作')
+                    : handleOpenAssignPermDialog(scope.row.id, scope.row.name)
+                "
+              >
+                分配权限
+              </el-button>
+              <el-button
+                v-hasPerm="['module_system:role:detail']"
+                type="info"
+                size="small"
+                link
+                icon="document"
+                @click="handleOpenDialog('detail', scope.row.id)"
+              >
+                详情
+              </el-button>
+              <el-button
+                v-hasPerm="['module_system:role:update']"
+                type="primary"
+                size="small"
+                link
+                icon="edit"
+                :disabled="scope.row.id === 1"
+                @click="
+                  scope.row.id === 1
+                    ? ElMessage.warning('系统默认角色，不可操作')
+                    : handleOpenDialog('update', scope.row.id)
+                "
+              >
+                编辑
+              </el-button>
+              <el-button
+                v-hasPerm="['module_system:role:delete']"
+                type="danger"
+                size="small"
+                link
+                icon="delete"
+                :disabled="scope.row.id === 1"
+                @click="
+                  scope.row.id === 1
+                    ? ElMessage.warning('系统默认角色，不可操作')
+                    : handleDelete([scope.row.id])
+                "
+              >
+                删除
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
 
       <!-- 分页区域 -->
       <template #footer>

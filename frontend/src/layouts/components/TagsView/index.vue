@@ -785,9 +785,10 @@ onUnmounted(() => {
   align-items: center;
   width: 100%;
   height: $tags-view-height;
-  background-color: var(--el-bg-color);
-  border: 1px solid var(--el-border-color-light);
-  box-shadow: 0 1px 1px var(--el-box-shadow-light);
+  background-color: var(--bg-primary);
+  border-top: 1px solid var(--el-border-color-light);
+  border-bottom: 1px solid var(--el-border-color-light);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
 
   .btn {
     display: flex;
@@ -868,8 +869,6 @@ onUnmounted(() => {
     }
 
     &.active {
-      color: var(--el-color-white);
-      background-color: var(--el-color-primary);
       border-color: var(--el-color-primary);
 
       &::before {
@@ -879,19 +878,19 @@ onUnmounted(() => {
         height: 8px;
         margin-right: 2px;
         content: "";
-        background: var(--el-color-white);
+        background: var(--el-color-primary);
         border-radius: 50%;
       }
 
       .tag-text {
-        color: var(--el-color-white);
+        color: var(--el-color-primary);
       }
 
       .tag-close-btn {
-        color: var(--el-color-white);
+        color: var(--el-color-primary);
 
         &:hover {
-          color: var(--el-color-white);
+          color: var(--el-color-danger);
         }
       }
     }

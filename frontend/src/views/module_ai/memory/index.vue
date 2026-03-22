@@ -133,147 +133,153 @@
       </div>
 
       <!-- 表格区域：系统配置列表 -->
-      <el-table
-        ref="tableRef"
-        v-loading="loading"
-        :data="pageTableData"
-        highlight-current-row
-        class="data-table__content"
-        height="calc(100vh - 440px)"
-        max-height="calc(100vh - 440px)"
-        border
-        stripe
-        @selection-change="handleSelectionChange"
-      >
-        <template #empty>
-          <el-empty :image-size="80" description="暂无数据" />
-        </template>
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'selection')?.show"
-          type="selection"
-          min-width="55"
-          align="center"
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'index')?.show"
-          fixed
-          label="序号"
-          min-width="60"
+      <div class="data-table__content">
+        <el-table
+          ref="tableRef"
+          v-loading="loading"
+          :data="pageTableData"
+          highlight-current-row
+          height="calc(100vh - 440px)"
+          max-height="calc(100vh - 440px)"
+          border
+          stripe
+          @selection-change="handleSelectionChange"
         >
-          <template #default="scope">
-            {{ (queryFormData.page_no - 1) * queryFormData.page_size + scope.$index + 1 }}
+          <template #empty>
+            <el-empty :image-size="80" description="暂无数据" />
           </template>
-        </el-table-column>
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'session_id')?.show"
-          label="会话ID"
-          prop="session_id"
-          min-width="180"
-          show-overflow-tooltip
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'title')?.show"
-          label="标题"
-          prop="title"
-          min-width="200"
-        >
-          <template #default="scope">
-            <el-input
-              v-if="editingRowId === scope.row.id"
-              ref="titleInputRef"
-              v-model="editingTitle"
-              size="small"
-              @blur="handleSaveTitle(scope.row)"
-              @keyup.enter="handleSaveTitle(scope.row)"
-            />
-            <span v-else class="editable-cell" title="点击编辑" @click="handleEditTitle(scope.row)">
-              {{ scope.row.title || "未命名会话" }}
-              <el-icon class="edit-icon"><Edit /></el-icon>
-            </span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'user_id')?.show"
-          label="用户ID"
-          prop="user_id"
-          min-width="120"
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'team_id')?.show"
-          label="团队ID"
-          prop="team_id"
-          min-width="120"
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'team_name')?.show"
-          label="部门名称"
-          prop="team_name"
-          min-width="120"
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'agent_id')?.show"
-          label="Agent ID"
-          prop="agent_id"
-          min-width="120"
-          show-overflow-tooltip
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'summary')?.show"
-          label="会话摘要"
-          prop="summary"
-          min-width="200"
-          show-overflow-tooltip
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'message_count')?.show"
-          label="消息数量"
-          prop="message_count"
-          min-width="100"
-          align="center"
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'created_time')?.show"
-          label="创建时间"
-          prop="created_time"
-          min-width="180"
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'updated_time')?.show"
-          label="更新时间"
-          prop="updated_time"
-          min-width="180"
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'operation')?.show"
-          fixed="right"
-          label="操作"
-          align="center"
-          min-width="120"
-        >
-          <template #default="scope">
-            <el-button
-              v-hasPerm="['module_ai:chat:detail']"
-              type="info"
-              size="small"
-              link
-              icon="document"
-              @click="handleOpenDialog('detail', scope.row.id)"
-            >
-              详情
-            </el-button>
-            <el-button
-              v-hasPerm="['module_ai:chat:delete']"
-              type="danger"
-              size="small"
-              link
-              icon="delete"
-              @click="handleDelete([scope.row.id])"
-            >
-              删除
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'selection')?.show"
+            type="selection"
+            min-width="55"
+            align="center"
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'index')?.show"
+            fixed
+            label="序号"
+            min-width="60"
+          >
+            <template #default="scope">
+              {{ (queryFormData.page_no - 1) * queryFormData.page_size + scope.$index + 1 }}
+            </template>
+          </el-table-column>
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'session_id')?.show"
+            label="会话ID"
+            prop="session_id"
+            min-width="180"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'title')?.show"
+            label="标题"
+            prop="title"
+            min-width="200"
+          >
+            <template #default="scope">
+              <el-input
+                v-if="editingRowId === scope.row.id"
+                ref="titleInputRef"
+                v-model="editingTitle"
+                size="small"
+                @blur="handleSaveTitle(scope.row)"
+                @keyup.enter="handleSaveTitle(scope.row)"
+              />
+              <span
+                v-else
+                class="editable-cell"
+                title="点击编辑"
+                @click="handleEditTitle(scope.row)"
+              >
+                {{ scope.row.title || "未命名会话" }}
+                <el-icon class="edit-icon"><Edit /></el-icon>
+              </span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'user_id')?.show"
+            label="用户ID"
+            prop="user_id"
+            min-width="120"
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'team_id')?.show"
+            label="团队ID"
+            prop="team_id"
+            min-width="120"
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'team_name')?.show"
+            label="部门名称"
+            prop="team_name"
+            min-width="120"
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'agent_id')?.show"
+            label="Agent ID"
+            prop="agent_id"
+            min-width="120"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'summary')?.show"
+            label="会话摘要"
+            prop="summary"
+            min-width="200"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'message_count')?.show"
+            label="消息数量"
+            prop="message_count"
+            min-width="100"
+            align="center"
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'created_time')?.show"
+            label="创建时间"
+            prop="created_time"
+            min-width="180"
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'updated_time')?.show"
+            label="更新时间"
+            prop="updated_time"
+            min-width="180"
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'operation')?.show"
+            fixed="right"
+            label="操作"
+            align="center"
+            min-width="120"
+          >
+            <template #default="scope">
+              <el-button
+                v-hasPerm="['module_ai:chat:detail']"
+                type="info"
+                size="small"
+                link
+                icon="document"
+                @click="handleOpenDialog('detail', scope.row.id)"
+              >
+                详情
+              </el-button>
+              <el-button
+                v-hasPerm="['module_ai:chat:delete']"
+                type="danger"
+                size="small"
+                link
+                icon="delete"
+                @click="handleDelete([scope.row.id])"
+              >
+                删除
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
 
       <!-- 分页区域 -->
       <template #footer>

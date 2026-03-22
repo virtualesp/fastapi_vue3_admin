@@ -15,7 +15,7 @@
               class="w-full h-full object-cover"
               :src="userStore.basicInfo.avatar + '?imageView2/1/w/80/h/80'"
             />
-            <el-icon v-else :size="40" color="#909399">
+            <el-icon v-else :size="40" class="text-secondary">
               <UserFilled />
             </el-icon>
           </div>
@@ -105,13 +105,13 @@
           <div class="flex-x-between mt-2 flex-1">
             <div class="flex-y-center">
               <span class="text-lg transition-all duration-300 hover:scale-110">9999</span>
-              <span v-if="true" class="ml-2 text-xs text-[#67c23a]">
+              <span v-if="true" class="ml-2 text-xs text-success">
                 <el-icon>
                   <Connection />
                 </el-icon>
                 已连接
               </span>
-              <span v-else class="ml-2 text-xs text-[#f56c6c]">
+              <span v-else class="ml-2 text-xs text-danger">
                 <el-icon>
                   <Failed />
                 </el-icon>
@@ -297,7 +297,7 @@
                 size="large"
               >
                 <div class="version-item" :class="{ 'latest-item': index === 0 }">
-                  <div>
+                  <div class="flex-x-between">
                     <el-text tag="strong">{{ item.title }}</el-text>
                     <el-tag v-if="item.tag" :type="index === 0 ? 'success' : 'info'" size="small">
                       {{ item.tag }}

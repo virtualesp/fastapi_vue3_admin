@@ -1,41 +1,16 @@
 <!-- 折叠按钮 -->
 <template>
   <div class="hamburger-wrapper" @click="toggleClick">
-    <div :class="['i-svg:collapse', { hamburger: true, 'is-active': isActive }, hamburgerClass]" />
+    <div :class="['i-svg:collapse', { hamburger: true, 'is-active': isActive }]" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { useSettingsStore } from "@/store";
-import { ThemeMode, SidebarColor } from "@/enums/settings/theme.enum";
-import { LayoutMode } from "@/enums/settings/layout.enum";
-
 defineProps({
   isActive: { type: Boolean, required: true },
 });
 
 const emit = defineEmits(["toggleClick"]);
-
-const settingsStore = useSettingsStore();
-const layout = computed(() => settingsStore.layout);
-
-const hamburgerClass = computed(() => {
-  // 如果暗黑主题
-  if (settingsStore.theme === ThemeMode.DARK) {
-    return "hamburger--white";
-  }
-
-  // 如果是混合布局 && 导航背景方案是经典蓝
-  if (
-    layout.value === LayoutMode.MIX &&
-    settingsStore.sidebarColorScheme === SidebarColor.CLASSIC_BLUE
-  ) {
-    return "hamburger--white";
-  }
-
-  // 默认返回空字符串
-  return "";
-});
 
 function toggleClick() {
   emit("toggleClick");
@@ -52,11 +27,12 @@ function toggleClick() {
 
   .hamburger {
     vertical-align: middle;
+    color: var(--el-text-color-secondary);
     transform: scaleX(-1);
-    transition: transform 0.3s ease;
+    transition: all 0.3s ease;
 
-    &--white {
-      color: #fff;
+    &:hover {
+      color: var(--el-color-primary);
     }
 
     &.is-active {

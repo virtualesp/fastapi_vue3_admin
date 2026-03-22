@@ -146,89 +146,89 @@
       </div>
 
       <!-- 表格区域 -->
-      <el-table
-        v-if="viewMode === 'list'"
-        ref="dataTableRef"
-        v-loading="loading"
-        :data="fileList"
-        row-key="file_url"
-        class="data-table__content"
-        height="calc(100vh - 440px)"
-        max-height="calc(100vh - 440px)"
-        border
-        stripe
-        @selection-change="handleSelectionChange"
-      >
-        <template #empty>
-          <el-empty :image-size="80" description="暂无数据" />
-        </template>
-        <el-table-column type="selection" min-width="40" align="center" />
-        <el-table-column type="index" fixed label="序号" min-width="50">
-          <template #default="scope">
-            {{ (queryFormData.page_no - 1) * queryFormData.page_size + scope.$index + 1 }}
-          </template>
-        </el-table-column>
-        <el-table-column label="名称" prop="name" min-width="200">
-          <template #default="{ row }">
-            <div class="file-name">
-              <el-icon class="file-icon">
-                <Folder v-if="row.is_dir" />
-                <Document v-else />
-              </el-icon>
-              <span :class="{ 'file-name-clickable': true }" @click="handleFileNameClick(row)">
-                {{ row.name }}
-              </span>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column label="大小" prop="size" min-width="120" align="center">
-          <template #default="{ row }">
-            <span v-if="!row.is_dir">{{ formatFileSize(row.size) }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="修改时间" prop="modified_time" min-width="180" sortable />
-        <el-table-column
-          fixed="right"
-          label="操作"
-          align="center"
-          min-width="200"
-          class="search-buttons"
+      <div v-if="viewMode === 'list'" class="data-table__content">
+        <el-table
+          ref="dataTableRef"
+          v-loading="loading"
+          :data="fileList"
+          row-key="file_url"
+          height="calc(100vh - 440px)"
+          max-height="calc(100vh - 440px)"
+          border
+          stripe
+          @selection-change="handleSelectionChange"
         >
-          <template #default="{ row }">
-            <el-button
-              v-if="!row.is_dir"
-              v-hasPerm="['module_monitor:resource:download']"
-              type="success"
-              size="small"
-              link
-              icon="download"
-              @click="handleDownload(row)"
-            >
-              下载
-            </el-button>
-            <el-button
-              v-hasPerm="['module_monitor:resource:rename']"
-              type="primary"
-              size="small"
-              link
-              icon="edit"
-              @click="handleRename(row)"
-            >
-              重命名
-            </el-button>
-            <el-button
-              v-hasPerm="['module_monitor:resource:delete']"
-              type="danger"
-              size="small"
-              link
-              icon="delete"
-              @click="handleDelete(row)"
-            >
-              删除
-            </el-button>
+          <template #empty>
+            <el-empty :image-size="80" description="暂无数据" />
           </template>
-        </el-table-column>
-      </el-table>
+          <el-table-column type="selection" min-width="40" align="center" />
+          <el-table-column type="index" fixed label="序号" min-width="50">
+            <template #default="scope">
+              {{ (queryFormData.page_no - 1) * queryFormData.page_size + scope.$index + 1 }}
+            </template>
+          </el-table-column>
+          <el-table-column label="名称" prop="name" min-width="200">
+            <template #default="{ row }">
+              <div class="file-name">
+                <el-icon class="file-icon">
+                  <Folder v-if="row.is_dir" />
+                  <Document v-else />
+                </el-icon>
+                <span :class="{ 'file-name-clickable': true }" @click="handleFileNameClick(row)">
+                  {{ row.name }}
+                </span>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column label="大小" prop="size" min-width="120" align="center">
+            <template #default="{ row }">
+              <span v-if="!row.is_dir">{{ formatFileSize(row.size) }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="修改时间" prop="modified_time" min-width="180" sortable />
+          <el-table-column
+            fixed="right"
+            label="操作"
+            align="center"
+            min-width="200"
+            class="search-buttons"
+          >
+            <template #default="{ row }">
+              <el-button
+                v-if="!row.is_dir"
+                v-hasPerm="['module_monitor:resource:download']"
+                type="success"
+                size="small"
+                link
+                icon="download"
+                @click="handleDownload(row)"
+              >
+                下载
+              </el-button>
+              <el-button
+                v-hasPerm="['module_monitor:resource:rename']"
+                type="primary"
+                size="small"
+                link
+                icon="edit"
+                @click="handleRename(row)"
+              >
+                重命名
+              </el-button>
+              <el-button
+                v-hasPerm="['module_monitor:resource:delete']"
+                type="danger"
+                size="small"
+                link
+                icon="delete"
+                @click="handleDelete(row)"
+              >
+                删除
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
 
       <!-- 网格视图 -->
       <div v-else class="grid-view">
