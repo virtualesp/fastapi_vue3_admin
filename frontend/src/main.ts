@@ -6,8 +6,7 @@ import { createTerminal } from "vue-web-terminal";
 // 暗黑主题样式
 import "element-plus/theme-chalk/dark/css-vars.css";
 import "element-plus/dist/index.css";
-// 暗黑模式自定义变量
-import "@/styles/dark/css-vars.css";
+// 主题变量（包含亮色和暗黑模式）
 import "@/styles/index.scss";
 
 import "uno.css";

@@ -168,145 +168,146 @@
       </div>
 
       <!-- 表格区域：系统配置列表 -->
-      <el-table
-        ref="dataTableRef"
-        v-loading="loading"
-        :data="pageTableData"
-        highlight-current-row
-        class="data-table__content"
-        height="calc(100vh - 440px)"
-        max-height="calc(100vh - 440px)"
-        border
-        stripe
-        @selection-change="handleSelectionChange"
-      >
-        <template #empty>
-          <el-empty :image-size="80" description="暂无数据" />
-        </template>
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'selection')?.show"
-          type="selection"
-          min-width="55"
-          align="center"
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'index')?.show"
-          type="index"
-          fixed
-          label="序号"
-          min-width="60"
+      <div class="data-table__content">
+        <el-table
+          ref="dataTableRef"
+          v-loading="loading"
+          :data="pageTableData"
+          highlight-current-row
+          height="calc(100vh - 440px)"
+          max-height="calc(100vh - 440px)"
+          border
+          stripe
+          @selection-change="handleSelectionChange"
         >
-          <template #default="scope">
-            {{ (queryFormData.page_no - 1) * queryFormData.page_size + scope.$index + 1 }}
+          <template #empty>
+            <el-empty :image-size="80" description="暂无数据" />
           </template>
-        </el-table-column>
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'dict_name')?.show"
-          key="dict_name"
-          label="字典名称"
-          prop="dict_name"
-          min-width="140"
-          show-overflow-tooltip
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'dict_type')?.show"
-          key="dict_type"
-          label="字典类型"
-          prop="dict_type"
-          min-width="180"
-        >
-          <template #default="scope">
-            <el-tag type="primary">{{ scope.row.dict_type }}</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'status')?.show"
-          key="status"
-          label="状态"
-          prop="status"
-          min-width="80"
-        >
-          <template #default="scope">
-            <el-tag :type="scope.row.status === '0' ? 'success' : 'danger'">
-              {{ scope.row.status ? "启用" : "停用" }}
-            </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'description')?.show"
-          key="description"
-          label="描述"
-          prop="description"
-          min-width="140"
-          show-overflow-tooltip
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'created_time')?.show"
-          key="created_time"
-          label="创建时间"
-          prop="created_time"
-          min-width="200"
-          sortable
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'updated_time')?.show"
-          key="updated_time"
-          label="更新时间"
-          prop="updated_time"
-          min-width="200"
-          sortable
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'operation')?.show"
-          fixed="right"
-          label="操作"
-          align="center"
-          min-width="260"
-        >
-          <template #default="scope">
-            <el-button
-              v-hasPerm="['module_system:dict_data:query']"
-              type="warning"
-              size="small"
-              link
-              icon="document"
-              @click="handleDictDataDrawer(scope.row)"
-            >
-              字典
-            </el-button>
-            <el-button
-              v-hasPerm="['module_system:dict_type:detail']"
-              type="info"
-              size="small"
-              link
-              icon="document"
-              @click="handleOpenDialog('detail', scope.row.id)"
-            >
-              详情
-            </el-button>
-            <el-button
-              v-hasPerm="['module_system:dict_type:update']"
-              type="primary"
-              size="small"
-              link
-              icon="edit"
-              @click="handleOpenDialog('update', scope.row.id)"
-            >
-              编辑
-            </el-button>
-            <el-button
-              v-hasPerm="['module_system:dict_type:delete']"
-              type="danger"
-              size="small"
-              link
-              icon="delete"
-              @click="handleDelete([scope.row.id])"
-            >
-              删除
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'selection')?.show"
+            type="selection"
+            min-width="55"
+            align="center"
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'index')?.show"
+            type="index"
+            fixed
+            label="序号"
+            min-width="60"
+          >
+            <template #default="scope">
+              {{ (queryFormData.page_no - 1) * queryFormData.page_size + scope.$index + 1 }}
+            </template>
+          </el-table-column>
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'dict_name')?.show"
+            key="dict_name"
+            label="字典名称"
+            prop="dict_name"
+            min-width="140"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'dict_type')?.show"
+            key="dict_type"
+            label="字典类型"
+            prop="dict_type"
+            min-width="180"
+          >
+            <template #default="scope">
+              <el-tag type="primary">{{ scope.row.dict_type }}</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'status')?.show"
+            key="status"
+            label="状态"
+            prop="status"
+            min-width="80"
+          >
+            <template #default="scope">
+              <el-tag :type="scope.row.status === '0' ? 'success' : 'danger'">
+                {{ scope.row.status ? "启用" : "停用" }}
+              </el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'description')?.show"
+            key="description"
+            label="描述"
+            prop="description"
+            min-width="140"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'created_time')?.show"
+            key="created_time"
+            label="创建时间"
+            prop="created_time"
+            min-width="200"
+            sortable
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'updated_time')?.show"
+            key="updated_time"
+            label="更新时间"
+            prop="updated_time"
+            min-width="200"
+            sortable
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'operation')?.show"
+            fixed="right"
+            label="操作"
+            align="center"
+            min-width="260"
+          >
+            <template #default="scope">
+              <el-button
+                v-hasPerm="['module_system:dict_data:query']"
+                type="warning"
+                size="small"
+                link
+                icon="document"
+                @click="handleDictDataDrawer(scope.row)"
+              >
+                字典
+              </el-button>
+              <el-button
+                v-hasPerm="['module_system:dict_type:detail']"
+                type="info"
+                size="small"
+                link
+                icon="document"
+                @click="handleOpenDialog('detail', scope.row.id)"
+              >
+                详情
+              </el-button>
+              <el-button
+                v-hasPerm="['module_system:dict_type:update']"
+                type="primary"
+                size="small"
+                link
+                icon="edit"
+                @click="handleOpenDialog('update', scope.row.id)"
+              >
+                编辑
+              </el-button>
+              <el-button
+                v-hasPerm="['module_system:dict_type:delete']"
+                type="danger"
+                size="small"
+                link
+                icon="delete"
+                @click="handleDelete([scope.row.id])"
+              >
+                删除
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
 
       <!-- 分页区域 -->
       <template #footer>

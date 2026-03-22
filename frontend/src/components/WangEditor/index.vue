@@ -23,26 +23,10 @@
 import "@wangeditor-next/editor/dist/css/style.css";
 import { Toolbar, Editor } from "@wangeditor-next/editor-for-vue";
 import { IToolbarConfig, IEditorConfig } from "@wangeditor-next/editor";
+import ResourceAPI from "@/api/module_monitor/resource";
 
 // 上传图片回调函数类型
 type InsertFnType = (_url: string, _alt: string, _href: string) => void;
-
-// 模拟文件上传API，根据实际项目进行调整
-interface UploadResult {
-  url: string;
-  name: string;
-}
-
-const FileAPI = {
-  uploadFile: async (file: File): Promise<UploadResult> => {
-    // 这里应该是实际的文件上传逻辑
-    // 暂时返回一个mock数据
-    return Promise.resolve({
-      url: "https://example.com/image.jpg",
-      name: file.name,
-    });
-  },
-};
 
 const props = defineProps({
   height: {
@@ -82,12 +66,19 @@ const editorConfig = ref<Partial<IEditorConfig>>({
   scroll: props.scroll,
   MENU_CONF: {
     uploadImage: {
-      customUpload(file: File, insertFn: InsertFnType) {
-        // 上传图片
-        FileAPI.uploadFile(file).then((res) => {
-          // 插入图片
-          insertFn(res.url, res.name, res.url);
-        });
+      async customUpload(file: File, insertFn: InsertFnType) {
+        const formData = new FormData();
+        formData.append("file", file);
+
+        try {
+          const res = await ResourceAPI.uploadFile(formData);
+          const data = res.data.data;
+
+          insertFn(data.file_url, data.filename, data.file_url);
+        } catch (error: any) {
+          console.error("图片上传失败:", error);
+          ElMessage.error("图片上传失败");
+        }
       },
     } as any,
   },

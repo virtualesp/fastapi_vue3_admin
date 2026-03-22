@@ -140,107 +140,109 @@
         </div>
       </div>
 
-      <el-table
-        ref="dataTableRef"
-        v-loading="loading"
-        :data="tableList"
-        highlight-current-row
-        class="data-table__content"
-        height="calc(100vh - 440px)"
-        max-height="calc(100vh - 440px)"
-        border
-        stripe
-        @selection-change="handleTableSelectionChange"
-      >
-        <template #empty>
-          <el-empty :image-size="80" description="暂无数据" />
-        </template>
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'selection')?.show"
-          type="selection"
-          align="center"
-          width="55"
-        ></el-table-column>
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'index')?.show"
-          label="序号"
-          type="index"
-          min-width="30"
-          align="center"
-          fixed
+      <div class="data-table__content">
+        <el-table
+          ref="dataTableRef"
+          v-loading="loading"
+          :data="tableList"
+          highlight-current-row
+          class="data-table__content"
+          height="calc(100vh - 440px)"
+          max-height="calc(100vh - 440px)"
+          border
+          stripe
+          @selection-change="handleTableSelectionChange"
         >
-          <template #default="scope">
-            <span>
-              {{ (queryFormData.page_no - 1) * queryFormData.page_size + scope.$index + 1 }}
-            </span>
+          <template #empty>
+            <el-empty :image-size="80" description="暂无数据" />
           </template>
-        </el-table-column>
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'table_name')?.show"
-          label="表名称"
-          prop="table_name"
-          :show-overflow-tooltip="true"
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'table_comment')?.show"
-          label="表描述"
-          prop="table_comment"
-          :show-overflow-tooltip="true"
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'class_name')?.show"
-          label="实体"
-          prop="class_name"
-          :show-overflow-tooltip="true"
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'created_time')?.show"
-          label="创建时间"
-          prop="created_time"
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'updated_time')?.show"
-          label="更新时间"
-          prop="updated_time"
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'operation')?.show"
-          label="操作"
-          align="center"
-          min-width="120"
-          class-name="small-padding fixed-width"
-        >
-          <template #default="scope">
-            <el-button
-              v-hasPerm="['module_generator:gencode:update']"
-              link
-              type="primary"
-              :icon="MagicStick"
-              @click="handlePreviewTable(scope.row)"
-            >
-              代码生成
-            </el-button>
-            <el-button
-              v-hasPerm="['module_generator:gencode:delete']"
-              link
-              type="danger"
-              icon="Delete"
-              @click="handleDelete(scope.row)"
-            >
-              删除
-            </el-button>
-            <el-button
-              v-hasPerm="['module_generator:db:sync']"
-              link
-              type="success"
-              icon="Refresh"
-              @click="handleSynchDb(scope.row)"
-            >
-              同步
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'selection')?.show"
+            type="selection"
+            align="center"
+            width="55"
+          ></el-table-column>
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'index')?.show"
+            label="序号"
+            type="index"
+            min-width="30"
+            align="center"
+            fixed
+          >
+            <template #default="scope">
+              <span>
+                {{ (queryFormData.page_no - 1) * queryFormData.page_size + scope.$index + 1 }}
+              </span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'table_name')?.show"
+            label="表名称"
+            prop="table_name"
+            :show-overflow-tooltip="true"
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'table_comment')?.show"
+            label="表描述"
+            prop="table_comment"
+            :show-overflow-tooltip="true"
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'class_name')?.show"
+            label="实体"
+            prop="class_name"
+            :show-overflow-tooltip="true"
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'created_time')?.show"
+            label="创建时间"
+            prop="created_time"
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'updated_time')?.show"
+            label="更新时间"
+            prop="updated_time"
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'operation')?.show"
+            label="操作"
+            align="center"
+            min-width="120"
+            class-name="small-padding fixed-width"
+          >
+            <template #default="scope">
+              <el-button
+                v-hasPerm="['module_generator:gencode:update']"
+                link
+                type="primary"
+                :icon="MagicStick"
+                @click="handlePreviewTable(scope.row)"
+              >
+                代码生成
+              </el-button>
+              <el-button
+                v-hasPerm="['module_generator:gencode:delete']"
+                link
+                type="danger"
+                icon="Delete"
+                @click="handleDelete(scope.row)"
+              >
+                删除
+              </el-button>
+              <el-button
+                v-hasPerm="['module_generator:db:sync']"
+                link
+                type="success"
+                icon="Refresh"
+                @click="handleSynchDb(scope.row)"
+              >
+                同步
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
 
       <!-- 分页区域 -->
       <template #footer>
@@ -575,166 +577,175 @@
               </el-dropdown>
             </el-space>
           </div>
-          <el-table
-            ref="dragTable"
-            v-loading="loading"
-            :data="info.columns"
-            row-key="id"
-            max-height="680"
-            highlight--currentrow
-            class="data-table__content"
-            border
-            stripe
-          >
-            <template #empty>
-              <el-empty :image-size="80" description="暂无数据" />
-            </template>
-            <el-table-column label="序号" type="index" width="60" fixed />
-            <el-table-column
-              label="列名"
-              prop="column_name"
-              min-width="60"
-              :show-overflow-tooltip="true"
-            />
-            <el-table-column
-              label="类型"
-              prop="column_type"
-              min-width="60"
-              :show-overflow-tooltip="true"
-            />
-            <el-table-column
-              label="长度"
-              prop="column_length"
-              width="80"
-              :show-overflow-tooltip="true"
+          <div class="data-table__content">
+            <el-table
+              ref="dragTable"
+              v-loading="loading"
+              :data="info.columns"
+              row-key="id"
+              max-height="680"
+              highlight--currentrow
+              border
+              stripe
             >
-              <template #default="scope">
-                <el-input v-model="scope.row.column_length" :disabled="scope.row.is_pk === '1'" />
+              <template #empty>
+                <el-empty :image-size="80" description="暂无数据" />
               </template>
-            </el-table-column>
-            <el-table-column label="注释" min-width="60">
-              <template #default="scope">
-                <el-input v-model="scope.row.column_comment"></el-input>
-              </template>
-            </el-table-column>
-            <el-table-column label="后端类型" min-width="60">
-              <template #default="scope">
-                <el-select v-model="scope.row.python_type">
-                  <el-option label="str" value="str" />
-                  <el-option label="int" value="int" />
-                  <el-option label="float" value="float" />
-                  <el-option label="Decimal" value="Decimal" />
-                  <el-option label="date" value="date" />
-                  <el-option label="time" value="time" />
-                  <el-option label="datetime" value="datetime" />
-                  <el-option label="bytes" value="bytes" />
-                  <el-option label="dict" value="dict" />
-                  <el-option label="list" value="list" />
-                </el-select>
-              </template>
-            </el-table-column>
-            <el-table-column label="后端属性" min-width="60">
-              <template #default="scope">
-                <el-input v-model="scope.row.python_field"></el-input>
-              </template>
-            </el-table-column>
-            <el-table-column label="新增" width="60">
-              <template #default="scope">
-                <el-checkbox v-model="scope.row.is_insert" />
-              </template>
-            </el-table-column>
-            <el-table-column label="编辑" width="60">
-              <template #default="scope">
-                <el-checkbox v-model="scope.row.is_edit" />
-              </template>
-            </el-table-column>
-            <el-table-column label="列表" width="60">
-              <template #default="scope">
-                <el-checkbox v-model="scope.row.is_list" />
-              </template>
-            </el-table-column>
-            <el-table-column label="查询" width="60">
-              <template #default="scope">
-                <el-checkbox v-model="scope.row.is_query" />
-              </template>
-            </el-table-column>
-            <el-table-column label="查询方式" min-width="60">
-              <template #default="scope">
-                <el-select v-model="scope.row.query_type">
-                  <el-option label="=" value="EQ" />
-                  <el-option label="!=" value="NE" />
-                  <el-option label=">" value="GT" />
-                  <el-option label=">=" value="GTE" />
-                  <el-option label="<" value="LT" />
-                  <el-option label="<=" value="LTE" />
-                  <el-option label="LIKE" value="LIKE" />
-                  <el-option label="BETWEEN" value="BETWEEN" />
-                </el-select>
-              </template>
-            </el-table-column>
-            <el-table-column
-              label="默认值"
-              prop="column_default"
-              min-width="60"
-              :show-overflow-tooltip="true"
-            >
-              <template #default="scope">
-                <el-input v-model="scope.row.column_default" :disabled="scope.row.is_pk === '1'" />
-              </template>
-            </el-table-column>
-            <el-table-column label="自增" width="60">
-              <template #default="scope">
-                <el-checkbox v-model="scope.row.is_increment" />
-              </template>
-            </el-table-column>
-            <el-table-column label="可空" width="60">
-              <template #default="scope">
-                <el-checkbox v-model="scope.row.is_nullable" />
-              </template>
-            </el-table-column>
-            <el-table-column label="唯一" width="60">
-              <template #default="scope">
-                <el-checkbox v-model="scope.row.is_unique" />
-              </template>
-            </el-table-column>
-            <el-table-column label="主键" width="60">
-              <template #default="scope">
-                <el-checkbox v-model="scope.row.is_pk" />
-              </template>
-            </el-table-column>
-            <el-table-column label="表单类型">
-              <template #default="scope">
-                <el-select v-model="scope.row.html_type">
-                  <el-option label="文本框" value="input" />
-                  <el-option label="文本域" value="textarea" />
-                  <el-option label="下拉框" value="select" />
-                  <el-option label="单选框" value="radio" />
-                  <el-option label="复选框" value="checkbox" />
-                  <el-option label="日期控件" value="datetime" />
-                  <el-option label="图片上传" value="imageUpload" />
-                  <el-option label="文件上传" value="fileUpload" />
-                  <el-option label="富文本控件" value="editor" />
-                </el-select>
-              </template>
-            </el-table-column>
-            <el-table-column label="字典类型" fixed="right">
-              <template #default="scope">
-                <el-select v-model="scope.row.dict_type" clearable filterable placeholder="请选择">
-                  <el-option
-                    v-for="dict in dictOptions"
-                    :key="dict.dict_type"
-                    :label="dict.dict_name"
-                    :value="dict.dict_type || ''"
+              <el-table-column label="序号" type="index" width="60" fixed />
+              <el-table-column
+                label="列名"
+                prop="column_name"
+                min-width="60"
+                :show-overflow-tooltip="true"
+              />
+              <el-table-column
+                label="类型"
+                prop="column_type"
+                min-width="60"
+                :show-overflow-tooltip="true"
+              />
+              <el-table-column
+                label="长度"
+                prop="column_length"
+                width="80"
+                :show-overflow-tooltip="true"
+              >
+                <template #default="scope">
+                  <el-input v-model="scope.row.column_length" :disabled="scope.row.is_pk === '1'" />
+                </template>
+              </el-table-column>
+              <el-table-column label="注释" min-width="60">
+                <template #default="scope">
+                  <el-input v-model="scope.row.column_comment"></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column label="后端类型" min-width="60">
+                <template #default="scope">
+                  <el-select v-model="scope.row.python_type">
+                    <el-option label="str" value="str" />
+                    <el-option label="int" value="int" />
+                    <el-option label="float" value="float" />
+                    <el-option label="Decimal" value="Decimal" />
+                    <el-option label="date" value="date" />
+                    <el-option label="time" value="time" />
+                    <el-option label="datetime" value="datetime" />
+                    <el-option label="bytes" value="bytes" />
+                    <el-option label="dict" value="dict" />
+                    <el-option label="list" value="list" />
+                  </el-select>
+                </template>
+              </el-table-column>
+              <el-table-column label="后端属性" min-width="60">
+                <template #default="scope">
+                  <el-input v-model="scope.row.python_field"></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column label="新增" width="60">
+                <template #default="scope">
+                  <el-checkbox v-model="scope.row.is_insert" />
+                </template>
+              </el-table-column>
+              <el-table-column label="编辑" width="60">
+                <template #default="scope">
+                  <el-checkbox v-model="scope.row.is_edit" />
+                </template>
+              </el-table-column>
+              <el-table-column label="列表" width="60">
+                <template #default="scope">
+                  <el-checkbox v-model="scope.row.is_list" />
+                </template>
+              </el-table-column>
+              <el-table-column label="查询" width="60">
+                <template #default="scope">
+                  <el-checkbox v-model="scope.row.is_query" />
+                </template>
+              </el-table-column>
+              <el-table-column label="查询方式" min-width="60">
+                <template #default="scope">
+                  <el-select v-model="scope.row.query_type">
+                    <el-option label="=" value="EQ" />
+                    <el-option label="!=" value="NE" />
+                    <el-option label=">" value="GT" />
+                    <el-option label=">=" value="GTE" />
+                    <el-option label="<" value="LT" />
+                    <el-option label="<=" value="LTE" />
+                    <el-option label="LIKE" value="LIKE" />
+                    <el-option label="BETWEEN" value="BETWEEN" />
+                  </el-select>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="默认值"
+                prop="column_default"
+                min-width="60"
+                :show-overflow-tooltip="true"
+              >
+                <template #default="scope">
+                  <el-input
+                    v-model="scope.row.column_default"
+                    :disabled="scope.row.is_pk === '1'"
+                  />
+                </template>
+              </el-table-column>
+              <el-table-column label="自增" width="60">
+                <template #default="scope">
+                  <el-checkbox v-model="scope.row.is_increment" />
+                </template>
+              </el-table-column>
+              <el-table-column label="可空" width="60">
+                <template #default="scope">
+                  <el-checkbox v-model="scope.row.is_nullable" />
+                </template>
+              </el-table-column>
+              <el-table-column label="唯一" width="60">
+                <template #default="scope">
+                  <el-checkbox v-model="scope.row.is_unique" />
+                </template>
+              </el-table-column>
+              <el-table-column label="主键" width="60">
+                <template #default="scope">
+                  <el-checkbox v-model="scope.row.is_pk" />
+                </template>
+              </el-table-column>
+              <el-table-column label="表单类型">
+                <template #default="scope">
+                  <el-select v-model="scope.row.html_type">
+                    <el-option label="文本框" value="input" />
+                    <el-option label="文本域" value="textarea" />
+                    <el-option label="下拉框" value="select" />
+                    <el-option label="单选框" value="radio" />
+                    <el-option label="复选框" value="checkbox" />
+                    <el-option label="日期控件" value="datetime" />
+                    <el-option label="图片上传" value="imageUpload" />
+                    <el-option label="文件上传" value="fileUpload" />
+                    <el-option label="富文本控件" value="editor" />
+                  </el-select>
+                </template>
+              </el-table-column>
+              <el-table-column label="字典类型" fixed="right">
+                <template #default="scope">
+                  <el-select
+                    v-model="scope.row.dict_type"
+                    clearable
+                    filterable
+                    placeholder="请选择"
                   >
-                    <span style="float: left">{{ dict.dict_name }}</span>
-                    <span style="float: right; font-size: 13px; color: #8492a6">
-                      {{ dict.dict_type }}
-                    </span>
-                  </el-option>
-                </el-select>
-              </template>
-            </el-table-column>
-          </el-table>
+                    <el-option
+                      v-for="dict in dictOptions"
+                      :key="dict.dict_type"
+                      :label="dict.dict_name"
+                      :value="dict.dict_type || ''"
+                    >
+                      <span style="float: left">{{ dict.dict_name }}</span>
+                      <span style="float: right; font-size: 13px; color: #8492a6">
+                        {{ dict.dict_type }}
+                      </span>
+                    </el-option>
+                  </el-select>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
         </div>
 
         <!-- 第三步：预览代码 -->

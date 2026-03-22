@@ -109,8 +109,7 @@ import { useRouter } from "vue-router";
 
 import { DeviceEnum } from "@/enums/settings/device.enum";
 import { useAppStore, useSettingsStore, useUserStore, useLockStore } from "@/store";
-import { SidebarColor, ThemeMode } from "@/enums/settings/theme.enum";
-import { LayoutMode } from "@/enums";
+import { ThemeMode } from "@/enums/settings/theme.enum";
 
 // 导入子组件
 import MenuSearch from "@/components/MenuSearch/index.vue";
@@ -215,29 +214,16 @@ const handlelockScreen = () => {
   dialogVisible.value = true;
 };
 
-// 根据主题和侧边栏配色方案选择样式类
+// 根据主题选择样式类
 const navbarActionsClass = computed(() => {
-  const { theme, sidebarColorScheme, layout } = settingStore;
+  const { theme } = settingStore;
 
   // 暗黑主题下，所有布局都使用白色文字
   if (theme === ThemeMode.DARK) {
     return "navbar-actions--white-text";
   }
 
-  // 明亮主题下
-  if (theme === ThemeMode.LIGHT) {
-    // 顶部布局和混合布局的顶部区域：
-    // - 如果侧边栏是经典蓝色，使用白色文字
-    // - 如果侧边栏是极简白色，使用深色文字
-    if (layout === LayoutMode.TOP || layout === LayoutMode.MIX) {
-      if (sidebarColorScheme === SidebarColor.CLASSIC_BLUE) {
-        return "navbar-actions--white-text";
-      } else {
-        return "navbar-actions--dark-text";
-      }
-    }
-  }
-
+  // 明亮主题下，使用深色文字
   return "navbar-actions--dark-text";
 });
 

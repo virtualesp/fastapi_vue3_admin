@@ -158,136 +158,137 @@
       </div>
 
       <!-- 表格区域：系统配置列表 -->
-      <el-table
-        ref="dataTableRef"
-        v-loading="loading"
-        :data="pageTableData"
-        highlight-current-row
-        class="data-table__content"
-        height="calc(100vh - 440px)"
-        max-height="calc(100vh - 440px)"
-        border
-        stripe
-        @selection-change="handleSelectionChange"
-      >
-        <template #empty>
-          <el-empty :image-size="80" description="暂无数据" />
-        </template>
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'selection')?.show"
-          type="selection"
-          min-width="55"
-          align="center"
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'index')?.show"
-          type="index"
-          fixed
-          label="序号"
-          min-width="60"
+      <div class="data-table__content">
+        <el-table
+          ref="dataTableRef"
+          v-loading="loading"
+          :data="pageTableData"
+          highlight-current-row
+          height="calc(100vh - 440px)"
+          max-height="calc(100vh - 440px)"
+          border
+          stripe
+          @selection-change="handleSelectionChange"
         >
-          <template #default="scope">
-            {{ (queryFormData.page_no - 1) * queryFormData.page_size + scope.$index + 1 }}
+          <template #empty>
+            <el-empty :image-size="80" description="暂无数据" />
           </template>
-        </el-table-column>
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'config_name')?.show"
-          key="config_name"
-          label="配置名称"
-          prop="config_name"
-          min-width="100"
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'config_key')?.show"
-          key="config_key"
-          label="配置键"
-          prop="config_key"
-          min-width="200"
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'config_value')?.show"
-          key="config_value"
-          label="配置值"
-          prop="config_value"
-          min-width="200"
-          show-overflow-tooltip
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'config_type')?.show"
-          key="config_type"
-          label="系统内置"
-          prop="config_type"
-          min-width="100"
-        >
-          <template #default="scope">
-            <el-tag v-if="scope.row.config_type" type="success">是</el-tag>
-            <el-tag v-else type="danger">否</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'description')?.show"
-          key="description"
-          label="描述"
-          prop="description"
-          min-width="120"
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'created_time')?.show"
-          key="created_time"
-          label="创建时间"
-          prop="created_time"
-          min-width="200"
-          sortable
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'updated_time')?.show"
-          key="updated_time"
-          label="更新时间"
-          prop="updated_time"
-          min-width="200"
-          sortable
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'operation')?.show"
-          fixed="right"
-          label="操作"
-          align="center"
-          min-width="200"
-        >
-          <template #default="scope">
-            <el-button
-              v-hasPerm="['module_system:param:detail']"
-              type="info"
-              size="small"
-              link
-              icon="document"
-              @click="handleOpenDialog('detail', scope.row.id)"
-            >
-              详情
-            </el-button>
-            <el-button
-              v-hasPerm="['module_system:param:update']"
-              type="primary"
-              size="small"
-              link
-              icon="edit"
-              @click="handleOpenDialog('update', scope.row.id)"
-            >
-              编辑
-            </el-button>
-            <el-button
-              v-hasPerm="['module_system:param:delete']"
-              type="danger"
-              size="small"
-              link
-              icon="delete"
-              @click="handleDelete([scope.row.id])"
-            >
-              删除
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'selection')?.show"
+            type="selection"
+            min-width="55"
+            align="center"
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'index')?.show"
+            type="index"
+            fixed
+            label="序号"
+            min-width="60"
+          >
+            <template #default="scope">
+              {{ (queryFormData.page_no - 1) * queryFormData.page_size + scope.$index + 1 }}
+            </template>
+          </el-table-column>
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'config_name')?.show"
+            key="config_name"
+            label="配置名称"
+            prop="config_name"
+            min-width="100"
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'config_key')?.show"
+            key="config_key"
+            label="配置键"
+            prop="config_key"
+            min-width="200"
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'config_value')?.show"
+            key="config_value"
+            label="配置值"
+            prop="config_value"
+            min-width="200"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'config_type')?.show"
+            key="config_type"
+            label="系统内置"
+            prop="config_type"
+            min-width="100"
+          >
+            <template #default="scope">
+              <el-tag v-if="scope.row.config_type" type="success">是</el-tag>
+              <el-tag v-else type="danger">否</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'description')?.show"
+            key="description"
+            label="描述"
+            prop="description"
+            min-width="120"
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'created_time')?.show"
+            key="created_time"
+            label="创建时间"
+            prop="created_time"
+            min-width="200"
+            sortable
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'updated_time')?.show"
+            key="updated_time"
+            label="更新时间"
+            prop="updated_time"
+            min-width="200"
+            sortable
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'operation')?.show"
+            fixed="right"
+            label="操作"
+            align="center"
+            min-width="200"
+          >
+            <template #default="scope">
+              <el-button
+                v-hasPerm="['module_system:param:detail']"
+                type="info"
+                size="small"
+                link
+                icon="document"
+                @click="handleOpenDialog('detail', scope.row.id)"
+              >
+                详情
+              </el-button>
+              <el-button
+                v-hasPerm="['module_system:param:update']"
+                type="primary"
+                size="small"
+                link
+                icon="edit"
+                @click="handleOpenDialog('update', scope.row.id)"
+              >
+                编辑
+              </el-button>
+              <el-button
+                v-hasPerm="['module_system:param:delete']"
+                type="danger"
+                size="small"
+                link
+                icon="delete"
+                @click="handleDelete([scope.row.id])"
+              >
+                删除
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
 
       <!-- 分页区域 -->
       <template #footer>

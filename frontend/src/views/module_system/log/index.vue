@@ -137,109 +137,110 @@
       </div>
 
       <!-- 表格区域：系统配置列表 -->
-      <el-table
-        ref="dataTableRef"
-        v-loading="loading"
-        :data="pageTableData"
-        highlight-current-row
-        class="data-table__content"
-        height="calc(100vh - 440px)"
-        max-height="calc(100vh - 440px)"
-        border
-        stripe
-        @selection-change="handleSelectionChange"
-      >
-        <template #empty>
-          <el-empty :image-size="80" description="暂无数据" />
-        </template>
-        <el-table-column prop="selection" type="selection" min-width="55" align="center" />
-        <el-table-column type="index" fixed label="序号" min-width="60">
-          <template #default="scope">
-            {{ (queryFormData.page_no - 1) * queryFormData.page_size + scope.$index + 1 }}
+      <div class="data-table__content">
+        <el-table
+          ref="dataTableRef"
+          v-loading="loading"
+          :data="pageTableData"
+          highlight-current-row
+          height="calc(100vh - 440px)"
+          max-height="calc(100vh - 440px)"
+          border
+          stripe
+          @selection-change="handleSelectionChange"
+        >
+          <template #empty>
+            <el-empty :image-size="80" description="暂无数据" />
           </template>
-        </el-table-column>
-        <el-table-column label="日志类型" prop="type" min-width="100">
-          <template #default="scope">
-            <el-tag :type="scope.row.type === 1 ? 'success' : 'primary'">
-              {{ scope.row.type === 1 ? "登录日志" : "操作日志" }}
-            </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="请求路径"
-          prop="request_path"
-          min-width="200"
-          show-overflow-tooltip
-        />
-        <el-table-column label="请求方法" prop="request_method" min-width="100">
-          <template #default="scope">
-            <el-tag :type="getMethodType(scope.row.request_method)">
-              {{ scope.row.request_method }}
-            </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column label="状态码" prop="response_code" min-width="100">
-          <template #default="scope">
-            <el-tag :type="getStatusCodeType(scope.row.response_code)">
-              {{ scope.row.response_code }}
-            </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column label="请求IP" prop="request_ip" min-width="180" show-overflow-tooltip>
-          <template #default="scope">
-            <el-text>{{ scope.row.request_ip }}</el-text>
-            <CopyButton
-              v-if="scope.row.request_ip"
-              :text="scope.row.request_ip"
-              :style="{ marginLeft: '2px' }"
-            />
-          </template>
-        </el-table-column>
-        <el-table-column label="处理时间" prop="process_time" min-width="120" />
-        <el-table-column
-          label="浏览器"
-          prop="request_browser"
-          min-width="220"
-          show-overflow-tooltip
-        />
-        <el-table-column label="系统" prop="request_os" min-width="100" />
-        <el-table-column label="描述" prop="description" min-width="120" show-overflow-tooltip />
-        <el-table-column label="创建时间" prop="created_time" min-width="200" sortable />
-        <el-table-column label="创建人" prop="created_id" min-width="120">
-          <template #default="scope">
-            {{ scope.row.created_by?.name }}
-          </template>
-        </el-table-column>
-        <el-table-column label="更新人" prop="updated_id" min-width="120">
-          <template #default="scope">
-            {{ scope.row.updated_by?.name }}
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" fixed="right" align="center" min-width="150">
-          <template #default="scope">
-            <el-button
-              v-hasPerm="['module_system:log:detail']"
-              type="info"
-              size="small"
-              link
-              icon="document"
-              @click="handleOpenDialog('detail', scope.row.id)"
-            >
-              详情
-            </el-button>
-            <el-button
-              v-hasPerm="['module_system:log:delete']"
-              type="danger"
-              size="small"
-              link
-              icon="delete"
-              @click="handleDelete([scope.row.id])"
-            >
-              删除
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+          <el-table-column prop="selection" type="selection" min-width="55" align="center" />
+          <el-table-column type="index" fixed label="序号" min-width="60">
+            <template #default="scope">
+              {{ (queryFormData.page_no - 1) * queryFormData.page_size + scope.$index + 1 }}
+            </template>
+          </el-table-column>
+          <el-table-column label="日志类型" prop="type" min-width="100">
+            <template #default="scope">
+              <el-tag :type="scope.row.type === 1 ? 'success' : 'primary'">
+                {{ scope.row.type === 1 ? "登录日志" : "操作日志" }}
+              </el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="请求路径"
+            prop="request_path"
+            min-width="200"
+            show-overflow-tooltip
+          />
+          <el-table-column label="请求方法" prop="request_method" min-width="100">
+            <template #default="scope">
+              <el-tag :type="getMethodType(scope.row.request_method)">
+                {{ scope.row.request_method }}
+              </el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column label="状态码" prop="response_code" min-width="100">
+            <template #default="scope">
+              <el-tag :type="getStatusCodeType(scope.row.response_code)">
+                {{ scope.row.response_code }}
+              </el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column label="请求IP" prop="request_ip" min-width="180" show-overflow-tooltip>
+            <template #default="scope">
+              <el-text>{{ scope.row.request_ip }}</el-text>
+              <CopyButton
+                v-if="scope.row.request_ip"
+                :text="scope.row.request_ip"
+                :style="{ marginLeft: '2px' }"
+              />
+            </template>
+          </el-table-column>
+          <el-table-column label="处理时间" prop="process_time" min-width="120" />
+          <el-table-column
+            label="浏览器"
+            prop="request_browser"
+            min-width="220"
+            show-overflow-tooltip
+          />
+          <el-table-column label="系统" prop="request_os" min-width="100" />
+          <el-table-column label="描述" prop="description" min-width="120" show-overflow-tooltip />
+          <el-table-column label="创建时间" prop="created_time" min-width="200" sortable />
+          <el-table-column label="创建人" prop="created_id" min-width="120">
+            <template #default="scope">
+              {{ scope.row.created_by?.name }}
+            </template>
+          </el-table-column>
+          <el-table-column label="更新人" prop="updated_id" min-width="120">
+            <template #default="scope">
+              {{ scope.row.updated_by?.name }}
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" fixed="right" align="center" min-width="150">
+            <template #default="scope">
+              <el-button
+                v-hasPerm="['module_system:log:detail']"
+                type="info"
+                size="small"
+                link
+                icon="document"
+                @click="handleOpenDialog('detail', scope.row.id)"
+              >
+                详情
+              </el-button>
+              <el-button
+                v-hasPerm="['module_system:log:delete']"
+                type="danger"
+                size="small"
+                link
+                icon="delete"
+                @click="handleDelete([scope.row.id])"
+              >
+                删除
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
 
       <!-- 分页区域 -->
       <template #footer>

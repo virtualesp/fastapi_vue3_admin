@@ -1,7 +1,7 @@
 import { defaultSettings } from "@/settings";
-import { SidebarColor, ThemeMode } from "@/enums/settings/theme.enum";
+import { ThemeMode } from "@/enums/settings/theme.enum";
 import type { LayoutMode } from "@/enums/settings/layout.enum";
-import { applyTheme, generateThemeColors, toggleDarkMode, toggleSidebarColor } from "@/utils/theme";
+import { applyTheme, generateThemeColors, toggleDarkMode } from "@/utils/theme";
 import { SETTINGS_KEYS } from "@/constants";
 
 // 🎯 设置项类型定义
@@ -23,7 +23,6 @@ interface SettingsState {
 
   // 布局设置
   layout: LayoutMode;
-  sidebarColorScheme: string;
   grayMode: boolean;
   userEnableAi: boolean;
   pageSwitchingAnimation: string;
@@ -93,11 +92,6 @@ export const useSettingsStore = defineStore("setting", () => {
   );
 
   // 🎯 布局和主题设置 - 持久化
-  const sidebarColorScheme = useStorage<string>(
-    SETTINGS_KEYS.SIDEBAR_COLOR_SCHEME,
-    defaultSettings.sidebarColorScheme
-  );
-
   // 布局设置
   const layout = useStorage<LayoutMode>(SETTINGS_KEYS.LAYOUT, defaultSettings.layout as LayoutMode);
   // 主题颜色
@@ -127,7 +121,6 @@ export const useSettingsStore = defineStore("setting", () => {
     showSizeSelect,
     showLangSelect,
     showNotification,
-    sidebarColorScheme,
     layout,
     grayMode,
     userEnableAi,
@@ -140,15 +133,6 @@ export const useSettingsStore = defineStore("setting", () => {
       toggleDarkMode(newTheme === ThemeMode.DARK);
       const colors = generateThemeColors(newThemeColor, newTheme);
       applyTheme(colors);
-    },
-    { immediate: true }
-  );
-
-  // 🎯 监听器 - 侧边栏配色方案变化
-  watch(
-    [sidebarColorScheme],
-    ([newSidebarColorScheme]) => {
-      toggleSidebarColor(newSidebarColorScheme === SidebarColor.CLASSIC_BLUE);
     },
     { immediate: true }
   );
@@ -177,12 +161,9 @@ export const useSettingsStore = defineStore("setting", () => {
 
   // 更新主题颜色
   function updateThemeColor(newColor: string): void {
-    themeColor.value = newColor;
-  }
-
-  // 更新侧边栏配色方案
-  function updateSidebarColorScheme(newScheme: string): void {
-    sidebarColorScheme.value = newScheme;
+    // 处理带alpha通道的颜色值，去除alpha部分
+    const cleanColor = newColor.length === 9 ? newColor.slice(0, 7) : newColor;
+    themeColor.value = cleanColor;
   }
 
   // 更新布局
@@ -237,7 +218,6 @@ export const useSettingsStore = defineStore("setting", () => {
     showNotification.value = defaultSettings.showNotification;
 
     // 布局和主题设置
-    sidebarColorScheme.value = defaultSettings.sidebarColorScheme;
     layout.value = defaultSettings.layout as LayoutMode;
     themeColor.value = defaultSettings.themeColor;
     theme.value = defaultSettings.theme;
@@ -267,7 +247,6 @@ export const useSettingsStore = defineStore("setting", () => {
     showNotification,
 
     // 🎯 布局和主题状态
-    sidebarColorScheme,
     layout,
     themeColor,
     theme,
@@ -276,7 +255,6 @@ export const useSettingsStore = defineStore("setting", () => {
     updateSetting,
     updateTheme,
     updateThemeColor,
-    updateSidebarColorScheme,
     updateLayout,
 
     // 🎯 面板控制

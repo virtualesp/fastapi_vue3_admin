@@ -210,210 +210,211 @@
       </div>
 
       <!-- 表格区域：系统配置列表 -->
-      <el-table
-        ref="tableRef"
-        v-loading="loading"
-        :data="pageTableData"
-        highlight-current-row
-        class="data-table__content"
-        height="calc(100vh - 440px)"
-        max-height="calc(100vh - 440px)"
-        border
-        stripe
-        @selection-change="handleSelectionChange"
-      >
-        <template #empty>
-          <el-empty :image-size="80" description="暂无数据" />
-        </template>
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'selection')?.show"
-          type="selection"
-          min-width="55"
-          align="center"
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'index')?.show"
-          fixed
-          label="序号"
-          min-width="60"
+      <div class="data-table__content">
+        <el-table
+          ref="tableRef"
+          v-loading="loading"
+          :data="pageTableData"
+          highlight-current-row
+          height="calc(100vh - 440px)"
+          max-height="calc(100vh - 440px)"
+          border
+          stripe
+          @selection-change="handleSelectionChange"
         >
-          <template #default="scope">
-            {{ (queryFormData.page_no - 1) * queryFormData.page_size + scope.$index + 1 }}
+          <template #empty>
+            <el-empty :image-size="80" description="暂无数据" />
           </template>
-        </el-table-column>
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'name')?.show"
-          label="名称"
-          prop="name"
-          min-width="140"
-          show-overflow-tooltip
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'uuid')?.show"
-          label="UUID"
-          prop="uuid"
-          min-width="180"
-          show-overflow-tooltip
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'status')?.show"
-          label="状态"
-          prop="status"
-          min-width="120"
-          show-overflow-tooltip
-        >
-          <template #default="scope">
-            <el-tag :type="scope.row.status ? 'success' : 'info'">
-              {{ scope.row.status ? "启用" : "停用" }}
-            </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'a')?.show"
-          label="整数"
-          prop="a"
-          min-width="100"
-          show-overflow-tooltip
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'b')?.show"
-          label="大整数"
-          prop="b"
-          min-width="120"
-          show-overflow-tooltip
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'c')?.show"
-          label="浮点数"
-          prop="c"
-          min-width="100"
-          show-overflow-tooltip
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'd')?.show"
-          label="布尔值"
-          prop="d"
-          min-width="100"
-          show-overflow-tooltip
-        >
-          <template #default="scope">
-            <el-tag :type="scope.row.d ? 'success' : 'danger'">
-              {{ scope.row.d ? "是" : "否" }}
-            </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'e')?.show"
-          label="日期"
-          prop="e"
-          min-width="120"
-          show-overflow-tooltip
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'f')?.show"
-          label="时间"
-          prop="f"
-          min-width="120"
-          show-overflow-tooltip
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'g')?.show"
-          label="日期时间"
-          prop="g"
-          min-width="180"
-          show-overflow-tooltip
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'h')?.show"
-          label="长文本"
-          prop="h"
-          min-width="140"
-          show-overflow-tooltip
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'description')?.show"
-          label="描述"
-          prop="description"
-          min-width="140"
-          show-overflow-tooltip
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'created_time')?.show"
-          label="创建时间"
-          prop="created_time"
-          min-width="180"
-          show-overflow-tooltip
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'updated_time')?.show"
-          label="更新时间"
-          prop="updated_time"
-          min-width="180"
-          show-overflow-tooltip
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'created_id')?.show"
-          label="创建人"
-          prop="created_id"
-          min-width="120"
-          show-overflow-tooltip
-        >
-          <template #default="scope">
-            <el-tag>{{ scope.row.created_by?.name }}</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'updated_id')?.show"
-          label="更新人"
-          prop="updated_id"
-          min-width="120"
-          show-overflow-tooltip
-        >
-          <template #default="scope">
-            <el-tag>{{ scope.row.updated_by?.name }}</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'operation')?.show"
-          fixed="right"
-          label="操作"
-          align="center"
-          min-width="200"
-        >
-          <template #default="scope">
-            <el-button
-              v-hasPerm="['module_example:demo:detail']"
-              type="info"
-              size="small"
-              link
-              icon="document"
-              @click="handleOpenDialog('detail', scope.row.id)"
-            >
-              详情
-            </el-button>
-            <el-button
-              v-hasPerm="['module_example:demo:update']"
-              type="primary"
-              size="small"
-              link
-              icon="edit"
-              @click="handleOpenDialog('update', scope.row.id)"
-            >
-              编辑
-            </el-button>
-            <el-button
-              v-hasPerm="['module_example:demo:delete']"
-              type="danger"
-              size="small"
-              link
-              icon="delete"
-              @click="handleDelete([scope.row.id])"
-            >
-              删除
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'selection')?.show"
+            type="selection"
+            min-width="55"
+            align="center"
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'index')?.show"
+            fixed
+            label="序号"
+            min-width="60"
+          >
+            <template #default="scope">
+              {{ (queryFormData.page_no - 1) * queryFormData.page_size + scope.$index + 1 }}
+            </template>
+          </el-table-column>
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'name')?.show"
+            label="名称"
+            prop="name"
+            min-width="140"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'uuid')?.show"
+            label="UUID"
+            prop="uuid"
+            min-width="180"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'status')?.show"
+            label="状态"
+            prop="status"
+            min-width="120"
+            show-overflow-tooltip
+          >
+            <template #default="scope">
+              <el-tag :type="scope.row.status ? 'success' : 'info'">
+                {{ scope.row.status ? "启用" : "停用" }}
+              </el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'a')?.show"
+            label="整数"
+            prop="a"
+            min-width="100"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'b')?.show"
+            label="大整数"
+            prop="b"
+            min-width="120"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'c')?.show"
+            label="浮点数"
+            prop="c"
+            min-width="100"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'd')?.show"
+            label="布尔值"
+            prop="d"
+            min-width="100"
+            show-overflow-tooltip
+          >
+            <template #default="scope">
+              <el-tag :type="scope.row.d ? 'success' : 'danger'">
+                {{ scope.row.d ? "是" : "否" }}
+              </el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'e')?.show"
+            label="日期"
+            prop="e"
+            min-width="120"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'f')?.show"
+            label="时间"
+            prop="f"
+            min-width="120"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'g')?.show"
+            label="日期时间"
+            prop="g"
+            min-width="180"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'h')?.show"
+            label="长文本"
+            prop="h"
+            min-width="140"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'description')?.show"
+            label="描述"
+            prop="description"
+            min-width="140"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'created_time')?.show"
+            label="创建时间"
+            prop="created_time"
+            min-width="180"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'updated_time')?.show"
+            label="更新时间"
+            prop="updated_time"
+            min-width="180"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'created_id')?.show"
+            label="创建人"
+            prop="created_id"
+            min-width="120"
+            show-overflow-tooltip
+          >
+            <template #default="scope">
+              <el-tag>{{ scope.row.created_by?.name }}</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'updated_id')?.show"
+            label="更新人"
+            prop="updated_id"
+            min-width="120"
+            show-overflow-tooltip
+          >
+            <template #default="scope">
+              <el-tag>{{ scope.row.updated_by?.name }}</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'operation')?.show"
+            fixed="right"
+            label="操作"
+            align="center"
+            min-width="200"
+          >
+            <template #default="scope">
+              <el-button
+                v-hasPerm="['module_example:demo:detail']"
+                type="info"
+                size="small"
+                link
+                icon="document"
+                @click="handleOpenDialog('detail', scope.row.id)"
+              >
+                详情
+              </el-button>
+              <el-button
+                v-hasPerm="['module_example:demo:update']"
+                type="primary"
+                size="small"
+                link
+                icon="edit"
+                @click="handleOpenDialog('update', scope.row.id)"
+              >
+                编辑
+              </el-button>
+              <el-button
+                v-hasPerm="['module_example:demo:delete']"
+                type="danger"
+                size="small"
+                link
+                icon="delete"
+                @click="handleDelete([scope.row.id])"
+              >
+                删除
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
 
       <!-- 分页区域 -->
       <template #footer>
@@ -558,15 +559,6 @@
           <el-form-item label="长文本" prop="h">
             <el-input v-model="formData.h" :rows="4" type="textarea" placeholder="请输入长文本" />
           </el-form-item>
-          <el-form-item label="元数据" prop="i">
-            <el-input
-              :model-value="JSON.stringify(formData.i)"
-              :rows="4"
-              type="textarea"
-              placeholder="请输入JSON格式的元数据"
-              @update:model-value="(val) => (formData.i = val ? JSON.parse(val) : undefined)"
-            />
-          </el-form-item>
           <el-form-item label="描述" prop="description">
             <el-input
               v-model="formData.description"
@@ -576,6 +568,38 @@
               type="textarea"
               placeholder="请输入描述"
             />
+          </el-form-item>
+          <el-form-item label="元数据" prop="i">
+            <div class="flex flex-col gap-2">
+              <div
+                v-for="(item, index) in metadataList"
+                :key="index"
+                class="flex items-center gap-2"
+              >
+                <el-input v-model="item.key" placeholder="键" />
+                <el-input v-model="item.value" placeholder="值" />
+                <el-button
+                  type="primary"
+                  icon="Plus"
+                  circle
+                  @click="metadataList.push({ key: '', value: '' })"
+                />
+                <el-button
+                  type="danger"
+                  icon="Delete"
+                  circle
+                  @click="metadataList.splice(index, 1)"
+                />
+              </div>
+              <el-button
+                v-if="metadataList.length === 0"
+                type="primary"
+                icon="Plus"
+                @click="metadataList.push({ key: '', value: '' })"
+              >
+                添加元数据
+              </el-button>
+            </div>
           </el-form-item>
         </el-form>
       </template>
@@ -637,6 +661,7 @@ const selectionRows = ref<DemoTable[]>([]);
 const loading = ref(false);
 const isExpand = ref(false);
 const isExpandable = ref(true);
+const metadataList = ref<{ key: string; value: string }[]>([]);
 
 // 分页表单
 const pageTableData = ref<DemoTable[]>([]);
@@ -861,6 +886,7 @@ async function resetForm() {
   }
   // 完全重置 formData 为初始状态
   Object.assign(formData, initialFormData);
+  metadataList.value = [];
 }
 
 // 行复选框选中项变化
@@ -886,10 +912,19 @@ async function handleOpenDialog(type: "create" | "update" | "detail", id?: numbe
     } else if (type === "update") {
       dialogVisible.title = "修改";
       Object.assign(formData, response.data.data);
+      if (formData.i && typeof formData.i === "object") {
+        metadataList.value = Object.entries(formData.i).map(([key, value]) => ({
+          key,
+          value: String(value),
+        }));
+      } else {
+        metadataList.value = [];
+      }
     }
   } else {
     dialogVisible.title = "新增示例";
     formData.id = undefined;
+    metadataList.value = [];
   }
   dialogVisible.visible = true;
 }
@@ -901,6 +936,17 @@ async function handleSubmit() {
     if (valid) {
       loading.value = true;
       const submitData = { ...formData };
+      if (metadataList.value.length > 0) {
+        const metadataObj: Record<string, string> = {};
+        metadataList.value.forEach((item) => {
+          if (item.key.trim()) {
+            metadataObj[item.key.trim()] = item.value;
+          }
+        });
+        submitData.i = Object.keys(metadataObj).length > 0 ? metadataObj : undefined;
+      } else {
+        submitData.i = undefined;
+      }
       const id = formData.id;
       if (id) {
         try {

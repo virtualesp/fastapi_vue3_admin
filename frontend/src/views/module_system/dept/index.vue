@@ -148,147 +148,148 @@
       </div>
 
       <!-- 表格区域：系统配置列表 -->
-      <el-table
-        ref="dataTableRef"
-        v-loading="loading"
-        row-key="id"
-        :data="pageTableData"
-        :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-        class="data-table__content"
-        height="calc(100vh - 350px)"
-        max-height="calc(100vh - 350px)"
-        border
-        stripe
-        @selection-change="handleSelectionChange"
-        @row-click="handleRowClick"
-      >
-        <template #empty>
-          <el-empty :image-size="80" description="暂无数据" />
-        </template>
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'selection')?.show"
-          type="selection"
-          min-width="55"
-          align="center"
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'index')?.show"
-          type="index"
-          fixed
-          label="序号"
-          min-width="60"
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'name')?.show"
-          key="name"
-          label="部门名称"
-          prop="name"
-          min-width="120"
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'code')?.show"
-          key="code"
-          label="部门编码"
-          prop="code"
-          min-width="120"
-        />
-        ')
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'status')?.show"
-          key="status"
-          label="状态"
-          prop="status"
-          min-width="60"
+      <div class="data-table__content">
+        <el-table
+          ref="dataTableRef"
+          v-loading="loading"
+          row-key="id"
+          :data="pageTableData"
+          :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+          height="calc(100vh - 350px)"
+          max-height="calc(100vh - 350px)"
+          border
+          stripe
+          @selection-change="handleSelectionChange"
+          @row-click="handleRowClick"
         >
-          <template #default="scope">
-            <el-tag :type="scope.row.status === '0' ? 'success' : 'danger'">
-              {{ scope.row.status ? "启用" : "停用" }}
-            </el-tag>
+          <template #empty>
+            <el-empty :image-size="80" description="暂无数据" />
           </template>
-        </el-table-column>
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'order')?.show"
-          key="order"
-          label="排序"
-          prop="order"
-          min-width="60"
-          show-overflow-tooltip
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'description')?.show"
-          key="description"
-          label="描述"
-          prop="description"
-          min-width="100"
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'created_time')?.show"
-          key="created_time"
-          label="创建时间"
-          prop="created_time"
-          min-width="120"
-          sortable
-        />
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'updated_time')?.show"
-          key="updated_time"
-          label="更新时间"
-          prop="updated_time"
-          min-width="120"
-          sortable
-        />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'selection')?.show"
+            type="selection"
+            min-width="55"
+            align="center"
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'index')?.show"
+            type="index"
+            fixed
+            label="序号"
+            min-width="60"
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'name')?.show"
+            key="name"
+            label="部门名称"
+            prop="name"
+            min-width="120"
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'code')?.show"
+            key="code"
+            label="部门编码"
+            prop="code"
+            min-width="120"
+          />
+          ')
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'status')?.show"
+            key="status"
+            label="状态"
+            prop="status"
+            min-width="60"
+          >
+            <template #default="scope">
+              <el-tag :type="scope.row.status === '0' ? 'success' : 'danger'">
+                {{ scope.row.status ? "启用" : "停用" }}
+              </el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'order')?.show"
+            key="order"
+            label="排序"
+            prop="order"
+            min-width="60"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'description')?.show"
+            key="description"
+            label="描述"
+            prop="description"
+            min-width="100"
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'created_time')?.show"
+            key="created_time"
+            label="创建时间"
+            prop="created_time"
+            min-width="120"
+            sortable
+          />
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'updated_time')?.show"
+            key="updated_time"
+            label="更新时间"
+            prop="updated_time"
+            min-width="120"
+            sortable
+          />
 
-        <el-table-column
-          v-if="tableColumns.find((col) => col.prop === 'operation')?.show"
-          fixed="right"
-          label="操作"
-          align="center"
-          min-width="200"
-        >
-          <template #default="scope">
-            <el-button
-              v-hasPerm="['module_system:dept:create']"
-              type="success"
-              size="small"
-              link
-              icon="plus"
-              @click="handleOpenDialog('create', undefined, scope.row.id)"
-            >
-              新增
-            </el-button>
-            <el-button
-              v-hasPerm="['module_system:dept:detail']"
-              type="info"
-              size="small"
-              link
-              icon="document"
-              @click="handleOpenDialog('detail', scope.row.id)"
-            >
-              详情
-            </el-button>
-            <el-button
-              v-hasPerm="['module_system:dept:update']"
-              type="primary"
-              size="small"
-              link
-              icon="edit"
-              @click="handleOpenDialog('update', scope.row.id)"
-            >
-              编辑
-            </el-button>
-            <el-button
-              v-hasPerm="['module_system:dept:delete']"
-              type="danger"
-              size="small"
-              link
-              icon="delete"
-              @click="handleDelete([scope.row.id])"
-            >
-              删除
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+          <el-table-column
+            v-if="tableColumns.find((col) => col.prop === 'operation')?.show"
+            fixed="right"
+            label="操作"
+            align="center"
+            min-width="200"
+          >
+            <template #default="scope">
+              <el-button
+                v-hasPerm="['module_system:dept:create']"
+                type="success"
+                size="small"
+                link
+                icon="plus"
+                @click="handleOpenDialog('create', undefined, scope.row.id)"
+              >
+                新增
+              </el-button>
+              <el-button
+                v-hasPerm="['module_system:dept:detail']"
+                type="info"
+                size="small"
+                link
+                icon="document"
+                @click="handleOpenDialog('detail', scope.row.id)"
+              >
+                详情
+              </el-button>
+              <el-button
+                v-hasPerm="['module_system:dept:update']"
+                type="primary"
+                size="small"
+                link
+                icon="edit"
+                @click="handleOpenDialog('update', scope.row.id)"
+              >
+                编辑
+              </el-button>
+              <el-button
+                v-hasPerm="['module_system:dept:delete']"
+                type="danger"
+                size="small"
+                link
+                icon="delete"
+                @click="handleDelete([scope.row.id])"
+              >
+                删除
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
     </el-card>
 
     <!-- 弹窗区域 -->

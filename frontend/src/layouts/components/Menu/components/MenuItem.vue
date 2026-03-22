@@ -137,6 +137,7 @@ function resolvePath(routePath: string) {
 </script>
 
 <style lang="scss">
+/* stylelint-disable no-descending-specificity */
 .hideSidebar {
   .submenu-title-noDropdown {
     position: relative;
@@ -181,13 +182,17 @@ function resolvePath(routePath: string) {
 
 html.dark {
   .el-menu-item:hover {
-    background-color: $menu-hover;
+    background-color: var(--menu-hover);
   }
 }
 
-html.sidebar-color-blue {
-  .el-menu-item:hover {
-    background-color: $menu-hover;
+// 激活菜单项样式 - 只有文字变色，无背景色
+.el-menu-item.is-active {
+  font-weight: 500;
+  color: var(--sidebar-active-text-color, var(--el-color-primary-dark-2)) !important;
+
+  .menu-icon {
+    color: var(--sidebar-active-text-color, var(--el-color-primary-dark-2)) !important;
   }
 }
 
@@ -195,36 +200,44 @@ html.sidebar-color-blue {
 .el-sub-menu {
   // 当父菜单包含激活子菜单时的样式
   &.has-active-child .el-sub-menu__title {
-    color: var(--el-color-primary) !important;
-    background-color: var(--el-color-primary-light-9) !important;
+    color: var(--sidebar-active-text-color, var(--el-color-primary-dark-2)) !important;
+    background-color: var(--sidebar-active-bg) !important;
 
     .menu-icon {
-      color: var(--el-color-primary) !important;
+      color: var(--sidebar-active-text-color, var(--el-color-primary-dark-2)) !important;
     }
   }
 
-  // 深色主题下的父菜单激活状态
-  html.dark & {
-    &.has-active-child .el-sub-menu__title {
-      color: var(--el-color-primary-light-3) !important;
-      background-color: rgba(64, 128, 255, 0.15) !important;
-
-      .menu-icon {
-        color: var(--el-color-primary-light-3) !important;
-      }
-    }
+  &.has-active-child .el-sub-menu__title:hover {
+    background-color: var(--sidebar-active-hover-bg) !important;
   }
 
   // 深蓝色侧边栏配色下的父菜单激活状态
-  html.sidebar-color-blue & {
-    &.has-active-child .el-sub-menu__title {
-      color: var(--el-color-primary-light-3) !important;
-      background-color: rgba(64, 128, 255, 0.2) !important;
+  html.sidebar-color-blue &.has-active-child .el-sub-menu__title {
+    color: var(--sidebar-active-text-color, var(--el-color-primary-light-3)) !important;
+    background-color: var(--sidebar-active-bg) !important;
 
-      .menu-icon {
-        color: var(--el-color-primary-light-3) !important;
-      }
+    .menu-icon {
+      color: var(--sidebar-active-text-color, var(--el-color-primary-light-3)) !important;
     }
+  }
+
+  html.sidebar-color-blue &.has-active-child .el-sub-menu__title:hover {
+    background-color: var(--sidebar-active-hover-bg) !important;
+  }
+
+  // 深色主题下的父菜单激活状态
+  html.dark &.has-active-child .el-sub-menu__title {
+    color: var(--sidebar-active-text-color, var(--el-color-primary-light-3)) !important;
+    background-color: var(--sidebar-active-bg) !important;
+
+    .menu-icon {
+      color: var(--sidebar-active-text-color, var(--el-color-primary-light-3)) !important;
+    }
+  }
+
+  html.dark &.has-active-child .el-sub-menu__title:hover {
+    background-color: var(--sidebar-active-hover-bg) !important;
   }
 }
 </style>

@@ -21,6 +21,7 @@ DateTimeStr = Annotated[
 # 自定义日期字符串类型
 DateStr = Annotated[
     date,
+    AfterValidator(lambda x: date_validator(x)),
     PlainSerializer(
         lambda x: x.strftime("%Y-%m-%d") if isinstance(x, date) else str(x),
         return_type=str,
@@ -31,6 +32,7 @@ DateStr = Annotated[
 # 自定义时间字符串类型
 TimeStr = Annotated[
     time,
+    AfterValidator(lambda x: time_validator(x)),
     PlainSerializer(
         lambda x: x.strftime("%H:%M:%S") if isinstance(x, time) else str(x),
         return_type=str,
@@ -76,6 +78,50 @@ def datetime_validator(value: str | datetime) -> datetime:
             return value
     except Exception:
         raise CustomException(code=RET.ERROR.code, msg="无效的日期格式")
+
+
+def date_validator(value: str | date) -> date:
+    """
+    日期格式验证器。
+
+    参数:
+    - value (str | date): 日期值。
+
+    返回:
+    - date: 格式化后的日期。
+
+    异常:
+    - CustomException: 日期格式无效时抛出。
+    """
+    try:
+        if isinstance(value, str):
+            return datetime.strptime(value, "%Y-%m-%d").date()
+        if isinstance(value, date):
+            return value
+    except Exception:
+        raise CustomException(code=RET.ERROR.code, msg="无效的日期格式")
+
+
+def time_validator(value: str | time) -> time:
+    """
+    时间格式验证器。
+
+    参数:
+    - value (str | time): 时间值。
+
+    返回:
+    - time: 格式化后的时间。
+
+    异常:
+    - CustomException: 时间格式无效时抛出。
+    """
+    try:
+        if isinstance(value, str):
+            return datetime.strptime(value, "%H:%M:%S").time()
+        if isinstance(value, time):
+            return value
+    except Exception:
+        raise CustomException(code=RET.ERROR.code, msg="无效的时间格式")
 
 
 def email_validator(value: str) -> str:

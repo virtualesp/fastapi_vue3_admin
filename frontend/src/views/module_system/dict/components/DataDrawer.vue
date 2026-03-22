@@ -138,93 +138,99 @@
       </div>
 
       <!-- 表格区域：系统配置列表 -->
-      <el-table
-        ref="dataTableRef"
-        v-loading="loading"
-        :data="pageTableData"
-        highlight-current-row
-        class="data-table__content"
-        height="calc(100vh - 430px)"
-        max-height="calc(100vh - 430px)"
-        border
-        stripe
-        @selection-change="handleSelectionChange"
-      >
-        <template #empty>
-          <el-empty :image-size="80" description="暂无数据" />
-        </template>
-        <el-table-column type="selection" min-width="55" align="center" />
-        <el-table-column type="index" fixed label="序号" min-width="60">
-          <template #default="scope">
-            {{ (queryFormData.page_no - 1) * queryFormData.page_size + scope.$index + 1 }}
+      <div class="data-table__content">
+        <el-table
+          ref="dataTableRef"
+          v-loading="loading"
+          :data="pageTableData"
+          highlight-current-row
+          height="calc(100vh - 430px)"
+          max-height="calc(100vh - 430px)"
+          border
+          stripe
+          @selection-change="handleSelectionChange"
+        >
+          <template #empty>
+            <el-empty :image-size="80" description="暂无数据" />
           </template>
-        </el-table-column>
-        <el-table-column label="标签" prop="dict_label" min-width="150" show-overflow-tooltip />
-        <el-table-column label="状态" prop="status" min-width="100" show-overflow-tooltip>
-          <template #default="scope">
-            <el-tag :type="scope.row.status === '0' ? 'success' : 'danger'">
-              {{ scope.row.status === "0" ? "启用" : "停用" }}
-            </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column label="类型" prop="dict_type" min-width="180" show-overflow-tooltip>
-          <template #default="scope">
-            <el-tag type="primary">{{ scope.row.dict_type }}</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column label="值" prop="dict_value" min-width="100" show-overflow-tooltip />
-        <el-table-column label="样式属性" prop="css_class" min-width="100" show-overflow-tooltip />
-        <el-table-column
-          label="列表类样式"
-          prop="list_class"
-          min-width="100"
-          show-overflow-tooltip
-        />
-        <el-table-column label="排序" prop="dict_sort" min-width="60" />
-        <el-table-column label="是否默认" prop="is_default" min-width="100">
-          <template #default="scope">
-            <el-tag v-if="scope.row.is_default" type="success">是</el-tag>
-            <el-tag v-else type="danger">否</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column label="描述" prop="description" min-width="100" show-overflow-tooltip />
-        <el-table-column label="创建时间" prop="created_time" min-width="200" sortable />
-        <el-table-column label="更新时间" prop="updated_time" min-width="200" sortable />
-        <el-table-column fixed="right" label="操作" align="center" min-width="200">
-          <template #default="scope">
-            <el-button
-              v-hasPerm="['module_system:dict_data:detail']"
-              type="info"
-              size="small"
-              link
-              icon="document"
-              @click="handleOpenDialog('detail', scope.row.id)"
-            >
-              详情
-            </el-button>
-            <el-button
-              v-hasPerm="['module_system:dict_data:update']"
-              type="primary"
-              size="small"
-              link
-              icon="edit"
-              @click="handleOpenDialog('update', scope.row.id)"
-            >
-              编辑
-            </el-button>
-            <el-button
-              v-hasPerm="['module_system:dict_data:delete']"
-              type="danger"
-              size="small"
-              link
-              icon="delete"
-              @click="handleDelete([scope.row.id])"
-            >
-              删除
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+          <el-table-column type="selection" min-width="55" align="center" />
+          <el-table-column type="index" fixed label="序号" min-width="60">
+            <template #default="scope">
+              {{ (queryFormData.page_no - 1) * queryFormData.page_size + scope.$index + 1 }}
+            </template>
+          </el-table-column>
+          <el-table-column label="标签" prop="dict_label" min-width="150" show-overflow-tooltip />
+          <el-table-column label="状态" prop="status" min-width="100" show-overflow-tooltip>
+            <template #default="scope">
+              <el-tag :type="scope.row.status === '0' ? 'success' : 'danger'">
+                {{ scope.row.status === "0" ? "启用" : "停用" }}
+              </el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column label="类型" prop="dict_type" min-width="180" show-overflow-tooltip>
+            <template #default="scope">
+              <el-tag type="primary">{{ scope.row.dict_type }}</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column label="值" prop="dict_value" min-width="100" show-overflow-tooltip />
+          <el-table-column
+            label="样式属性"
+            prop="css_class"
+            min-width="100"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            label="列表类样式"
+            prop="list_class"
+            min-width="100"
+            show-overflow-tooltip
+          />
+          <el-table-column label="排序" prop="dict_sort" min-width="60" />
+          <el-table-column label="是否默认" prop="is_default" min-width="100">
+            <template #default="scope">
+              <el-tag v-if="scope.row.is_default" type="success">是</el-tag>
+              <el-tag v-else type="danger">否</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column label="描述" prop="description" min-width="100" show-overflow-tooltip />
+          <el-table-column label="创建时间" prop="created_time" min-width="200" sortable />
+          <el-table-column label="更新时间" prop="updated_time" min-width="200" sortable />
+          <el-table-column fixed="right" label="操作" align="center" min-width="200">
+            <template #default="scope">
+              <el-button
+                v-hasPerm="['module_system:dict_data:detail']"
+                type="info"
+                size="small"
+                link
+                icon="document"
+                @click="handleOpenDialog('detail', scope.row.id)"
+              >
+                详情
+              </el-button>
+              <el-button
+                v-hasPerm="['module_system:dict_data:update']"
+                type="primary"
+                size="small"
+                link
+                icon="edit"
+                @click="handleOpenDialog('update', scope.row.id)"
+              >
+                编辑
+              </el-button>
+              <el-button
+                v-hasPerm="['module_system:dict_data:delete']"
+                type="danger"
+                size="small"
+                link
+                icon="delete"
+                @click="handleDelete([scope.row.id])"
+              >
+                删除
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
 
       <!-- 分页区域 -->
       <template #footer>
